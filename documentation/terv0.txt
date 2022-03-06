@@ -1,0 +1,17 @@
+*** BOMBERMAN TERV ***
+
+*Gergő cumizik, mert nem indul a java :(
+*Peti streameli a gemet
+*Pali logol
+
+nincs npc ellenség, csak játékosok játszanak egymás ellen
+a hálózatos részt meg kell írni
+
+animált mpzgáshoz nem ragaszkodunk
+	elég csak képeket cserélgetni - azt lehet, ilyet tudunk
+	(sokféle sprite létezik, majd keresünk)
+
+milyen grafikus izét használunk?
+	passz, milyenek vannak?
+
+lesz git repó

@@ -1,0 +1,25 @@
+Github howto terminálhoz
+
+klónozni:
+git clone https://github.com/PepiMester/Bomberman.git
+
+lemásolni a legutóbbi változtatásokat:
+git pull
+
+amikor csinálsz valamit a saját gépeden:
+git add <fájlnév>
+
+commit:
+git commit -m "Ezt egy üzenet, hogy mit csináltam a repóval"
+
+feltöltés:
+git push
+
+itt meg fogja kérdezni a credentialokat:
+az username-hez a gites felhasználónév kell
+a password bonyolultabb, oda valami token kell, ezt így lehet szerezni:
+https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token
+
+ha legközelebb nem akarod ismét beírni oda, így meg lehet jegyeztetni a géppel:
+git config --global credential.helper store
+

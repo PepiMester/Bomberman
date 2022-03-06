@@ -1,3 +1,3 @@
 # Bomberman
 
-halo
+halobalo

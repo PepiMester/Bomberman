@@ -2,7 +2,7 @@ package hu.brszt.tcpdemo;
 
 import java.io.*;
 
-public class main {
+public class Main {
     /* Multithread tcp szerver demó */
 
     private static Thread serverThread;

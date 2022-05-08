@@ -21,6 +21,9 @@ public class Main {
                 gw.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);     //így lehet bezárni az ablakot X-szel
                 gw.setSize(15*32,15*32);
 
-
+                //Map.update();
+                //while(1) {
+                  //
+                //}
         }
 }

@@ -14,6 +14,7 @@ public class Map {
     public ArrayList<Powerup> Powerups;
     public ArrayList<Obstacle> Obstacles;
     public ArrayList<BufferedImage> Sprites;
+    public
 
     private void readSprites() {
 

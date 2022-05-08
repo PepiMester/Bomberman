@@ -11,7 +11,7 @@ import java.util.HashMap;
 
 public class Map extends JFrame {
 
-    public ArrayList<Explosion> Explosions;
+    public ArrayList<Explosion> Explosions = new ArrayList<Explosion>();
     public ArrayList<Player> Players = new ArrayList<Player>();
     public ArrayList<Bomb> Bombs = new ArrayList<Bomb>();
     public ArrayList<Powerup> Powerups = new ArrayList<Powerup>();
@@ -30,6 +30,11 @@ public class Map extends JFrame {
             Sprites.put("BreakableObstacle", ImageIO.read(new File("./src/Sprites/obstacle.png")));
             Sprites.put("Player1_sprites", ImageIO.read(new File("./src/Sprites/player1.png")));
             Sprites.put("Player2_sprites", ImageIO.read(new File("./src/Sprites/player2.png")));
+            Sprites.put("Powerup_HealthBoost", ImageIO.read(new File("./src/Sprites/healthboost.png")));
+            Sprites.put("Powerup_ExtraAmmo", ImageIO.read(new File("./src/Sprites/extra_bomb.png")));
+            Sprites.put("Powerup_Pierce", ImageIO.read(new File("./src/Sprites/pierce.png")));
+            Sprites.put("Powerup_Speed", ImageIO.read(new File("./src/Sprites/speed.png")));
+            Sprites.put("Powerup_Range", ImageIO.read(new File("./src/Sprites/range.png")));
         }
         catch (IOException e) {
             System.err.println("Nem sikerült beolvasni a képet");
@@ -64,7 +69,9 @@ public class Map extends JFrame {
                 }
                 //felrobbantható akadályok véletlenszerű eséllyel, de a játékoshoz 2 mezőnél nem közelebb
                 else if(!((i==1 && j<4) || (i<4 && j==1) || (i==map_width-2 && j>map_height-5) || (i>map_width-5 && j==map_height-2))){
-                    Obstacles.add(new Obstacle(Sprites.get("BreakableObstacle"), position, true));
+                    Obstacle obstacle = new Obstacle(Sprites.get("BreakableObstacle"), position, true);
+                    //TODO: megcsinálni a powerup-ok hozzárendelését
+                    Obstacles.add(obstacle);
                 }
             }
         }

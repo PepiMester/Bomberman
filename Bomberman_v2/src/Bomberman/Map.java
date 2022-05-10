@@ -1,7 +1,11 @@
 package Bomberman;
 
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
+import java.awt.image.AffineTransformOp;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.nio.Buffer;
 import java.util.ArrayList;
 import javax.swing.*;
 import java.awt.*;
@@ -9,7 +13,7 @@ import javax.imageio.ImageIO;
 import java.io.File;
 import java.util.HashMap;
 
-public class Map extends JFrame {
+public class Map extends JFrame{
 
     public ArrayList<Explosion> Explosions = new ArrayList<Explosion>();
     public ArrayList<Player> Players = new ArrayList<Player>();
@@ -49,14 +53,14 @@ public class Map extends JFrame {
         readSprites();
 
         //játékosok lerakása a pálya átelennes sarkaiba
-        Players.add(new Player(Sprites.get("Player1_sprites"), new int[] {1, 1}));
-        Players.add(new Player(Sprites.get("Player2_sprites"), new int[] {map_width-2,  map_width-2}));
+        Players.add(new Player(Sprites.get("Player1_sprites"), new int[] {32, 32}));
+        Players.add(new Player(Sprites.get("Player2_sprites"), new int[] {(map_width-2) * 32,  (map_height-2) * 32}));
 
         //pálya létrehozása
         for (int i=0; i<map_width; i++) {
             for (int j=0; j<map_height; j++) {
 
-                int[] position = new int[] {i, j};
+                int[] position = new int[] {i*32, j*32};
 
                 //pálya körbe rakása felrobbanthatatlan akadályokkal
                 if(i==0 || i==map_width-1 || j==0 || j==map_height-1) {
@@ -82,25 +86,42 @@ public class Map extends JFrame {
         setResizable(false);
         pack();
         setVisible(true);
+
+        //ezzel rendeljük hozzá a játékoshoz a billentyűlenyomásokat, hogy player 1-et irányítsuk
+        addKeyListener(Players.get(0));
     }
 
+    //játékmechanika megvalósítása
     public void Update () {
-
-        BufferedImage img = Sprites.get("UnbreakableObstacle");
+        for (Player player: Players) {
+            player.Update();
+        }
     }
 
     @Override
     public void paint(Graphics g){
-        super.paint(g);
-        g.setColor(Color.gray);
-        g.fillRect(0, 0, map_width*32, map_height*32);
+
+        //rajzolás buffereléssel: a villogás elkerülése végett egy MapContent bufferbe rajzolunk,
+        //majd azt másoljuk ki az ablakra
+
+        BufferedImage MapContent = new BufferedImage(map_width * 32, map_height * 32, BufferedImage.TYPE_INT_RGB);
+        Graphics2D buffer = MapContent.createGraphics();
+
+        // háttér kitöltése színnel
+        buffer.setColor(Color.gray);
+        buffer.fillRect(0, 0, map_width*32, map_height*32);
+
+        //játékelemek kirajzolása
         for (Obstacle obstacle: Obstacles) {
-            g.drawImage(obstacle.currentSprite, obstacle.position[0]*32+getInsets().left, obstacle.position[1]*32+getInsets().top, 32, 32, null);
+            buffer.drawImage(obstacle.currentSprite, obstacle.position[0], obstacle.position[1], null);
         }
 
         for (Player player: Players) {
-            g.drawImage(player.currentSprite, player.position[0]*32+getInsets().left, player.position[1]*32 + getInsets().top, null);
+            buffer.drawImage(player.currentSprite, player.position[0], player.position[1], null);
         }
+
+        //bufferelés
+        g.drawImage(MapContent, getInsets().left, getInsets().top,null);
     }
 }
 

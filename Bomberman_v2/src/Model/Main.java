@@ -1,11 +1,6 @@
 package Model;
-import javax.swing.*;
-import java.awt.*;
 
 import Bomberman.Map;
-
-import java.lang.reflect.GenericArrayType;
-import java.time.Clock;
 
 public class Main {
         Double GeneralTime;

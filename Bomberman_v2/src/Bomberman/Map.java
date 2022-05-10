@@ -1,11 +1,7 @@
 package Bomberman;
 
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
-import java.awt.image.AffineTransformOp;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
-import java.nio.Buffer;
 import java.util.ArrayList;
 import javax.swing.*;
 import java.awt.*;
@@ -15,19 +11,19 @@ import java.util.HashMap;
 
 public class Map extends JFrame{
 
-    public ArrayList<Explosion> Explosions = new ArrayList<Explosion>();
-    public ArrayList<Player> Players = new ArrayList<Player>();
-    public ArrayList<Bomb> Bombs = new ArrayList<Bomb>();
-    public ArrayList<Powerup> Powerups = new ArrayList<Powerup>();
-    public ArrayList<Obstacle> Obstacles = new ArrayList<Obstacle>();
-    public HashMap<String, BufferedImage> Sprites = new HashMap<String, BufferedImage>();
+    public static ArrayList<Explosion> Explosions = new ArrayList<Explosion>();
+    public static ArrayList<Player> Players = new ArrayList<Player>();
+    public static ArrayList<Bomb> Bombs = new ArrayList<Bomb>();
+    public static ArrayList<Powerup> Powerups = new ArrayList<Powerup>();
+    public static ArrayList<Obstacle> Obstacles = new ArrayList<Obstacle>();
+    public static HashMap<String, BufferedImage> Sprites = new HashMap<String, BufferedImage>();
 
     //konstansok, hogy itt egyszerre lehessen paraméterezni a mapot, ne kelljen mindenhol átírni
     // ha változtatni akarunk esetleg rajta
     private final int map_width = 15;
     private final int map_height = 15;
 
-    public void readSprites() {
+    private void readSprites() {
 
         try {
             Sprites.put("UnbreakableObstacle", ImageIO.read(new File("./src/Sprites/wall.png")));
@@ -96,6 +92,11 @@ public class Map extends JFrame{
         for (Player player: Players) {
             player.Update();
         }
+    }
+
+    public static void PlaceBomb(Player bomber){
+        //TODO: Bombs.add() annak vizsgálatával, hogy van-e már az adott helyen bomba
+        // + hogy szeretnénk megcsinálni a sprite-ok animációit?
     }
 
     @Override

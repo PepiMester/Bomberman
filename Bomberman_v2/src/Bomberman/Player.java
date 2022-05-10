@@ -21,26 +21,9 @@ public class Player extends Element implements KeyListener {
     private boolean ActionPressed = false;
 
     //TODO: animáció (?)
-    
+
     public Player(BufferedImage sprite, int[] position) {
         super(sprite, position);
-    }
-
-    //játékos cselekvései
-    public void Update() {
-        if(UpPressed==true){
-            position[1] = position[1] - Speed;
-        }
-        if(DownPressed==true){
-            position[1] = position[1] + Speed;
-        }
-        if(LeftPressed==true){
-            position[0] = position[0] - Speed;
-        }
-        if(RightPressed==true){
-            position[0] = position[0] + Speed;
-        }
-        //TODO: ActionPressed
     }
 
     @Override
@@ -96,5 +79,24 @@ public class Player extends Element implements KeyListener {
     @Override
     public void keyTyped(KeyEvent e) {
         //erre nincs szükség, csak a KeyListener interface implementálásához kell, hogy létezzen ez a metódus
+    }
+
+    //játékos cselekvései
+    public void Update() {
+        if(UpPressed){
+            position[1] = position[1] - Speed;
+        }
+        if(DownPressed){
+            position[1] = position[1] + Speed;
+        }
+        if(LeftPressed){
+            position[0] = position[0] - Speed;
+        }
+        if(RightPressed){
+            position[0] = position[0] + Speed;
+        }
+        if(ActionPressed){
+            Map.PlaceBomb(this);
+        }
     }
 }

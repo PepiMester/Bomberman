@@ -8,6 +8,7 @@ import java.awt.*;
 import javax.imageio.ImageIO;
 import java.io.File;
 import java.util.HashMap;
+import java.util.Random;
 
 public class Map extends JFrame{
 
@@ -52,6 +53,9 @@ public class Map extends JFrame{
         Players.add(new Player(Sprites.get("Player1_sprites"), new int[] {32, 32}));
         Players.add(new Player(Sprites.get("Player2_sprites"), new int[] {(map_width-2) * 32,  (map_height-2) * 32}));
 
+        //véletlenszám-generátor a power-upokhoz
+        Random rand = new Random();
+
         //pálya létrehozása
         for (int i=0; i<map_width; i++) {
             for (int j=0; j<map_height; j++) {
@@ -68,9 +72,15 @@ public class Map extends JFrame{
                     Obstacles.add(new Obstacle(Sprites.get("UnbreakableObstacle"), position, false));
                 }
                 //felrobbantható akadályok véletlenszerű eséllyel, de a játékoshoz 2 mezőnél nem közelebb
-                else if(!((i==1 && j<4) || (i<4 && j==1) || (i==map_width-2 && j>map_height-5) || (i>map_width-5 && j==map_height-2))){
+                else if(!((i==1 && j<4) || (i<4 && j==1) || (i==map_width-2 && j>map_height-5) || (i>map_width-5 && j==map_height-2)))
+                {
                     Obstacle obstacle = new Obstacle(Sprites.get("BreakableObstacle"), position, true);
-                    //TODO: megcsinálni a powerup-ok hozzárendelését
+
+                    //30%-os eséllyel legyen alatta valamilyen powerup
+                    if(rand.nextInt(100) < 30)
+                    {
+                        //TODO: megcsinálni a powerup-ok hozzárendelését
+                    }
                     Obstacles.add(obstacle);
                 }
             }
@@ -81,6 +91,7 @@ public class Map extends JFrame{
         getContentPane().setPreferredSize(new Dimension(map_width * 32 + getInsets().left + getInsets().right, map_height * 32 + getInsets().top + getInsets().bottom));
         setResizable(false);
         pack();
+        setLocationRelativeTo(null);    //ablak középre igazítása a képernyőn
         setVisible(true);
 
         //ezzel rendeljük hozzá a játékoshoz a billentyűlenyomásokat, hogy player 1-et irányítsuk
@@ -91,12 +102,17 @@ public class Map extends JFrame{
     public void Update () {
         for (Player player: Players) {
             player.Update();
+            //TODO: collision detection a player körül (más nem interaktál)
+            //TODO: robbanás kezelése: akadályok lebontása, ami alatt van powerup, az jelenjen meg
         }
     }
 
+    //bomba lerakás (Player hívja Action gomb hatására)
     public static void PlaceBomb(Player bomber){
+        //Bomb bomb = new Bomb(...);
         //TODO: Bombs.add() annak vizsgálatával, hogy van-e már az adott helyen bomba
         // + hogy szeretnénk megcsinálni a sprite-ok animációit?
+        //Bomb.Align();
     }
 
     @Override

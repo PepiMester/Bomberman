@@ -13,7 +13,8 @@ public class Bomb extends Tile {
     }
 
     public void Align() {
-
+        this.position[0] = Math.round(this.position[0] / 32) * 32;
+        this.position[1] = Math.round(this.position[1] / 32) * 32;
     }
 
     @Override

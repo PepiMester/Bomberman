@@ -24,8 +24,8 @@ public class Player extends Element implements KeyListener {
 
     private BufferedImage[][] Sprites;
 
-    private final int spriteHeight = 48;
-    private final int spriteWidth = 32;
+    private final int spriteHeight = 36;
+    private final int spriteWidth = 28;
 
     //TODO: sprite map-ek rajzolása
     public Player(BufferedImage sprite_map, int[] position) {

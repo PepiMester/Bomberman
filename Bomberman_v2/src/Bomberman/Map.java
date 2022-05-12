@@ -79,7 +79,29 @@ public class Map extends JFrame{
                     //30%-os eséllyel legyen alatta valamilyen powerup
                     if(rand.nextInt(100) < 30)
                     {
-                        //TODO: megcsinálni a powerup-ok hozzárendelését
+                        PowerupType tipus = null;
+
+                        switch(rand.nextInt(5)){
+                            case 0:
+                                tipus = PowerupType.POWER_FIREPOWER;
+                                break;
+                            case 1:
+                                tipus = PowerupType.POWER_HEALTH;
+                                break;
+                            case 2:
+                                tipus = PowerupType.POWER_RANGE;
+                                break;
+                            case 3:
+                                tipus = PowerupType.POWER_PIERCE;
+                                break;
+                            case 4:
+                                tipus = PowerupType.POWER_SPEED;
+                                break;
+                        }
+
+                        Powerup Powerup = new Powerup(tipus, position);
+                        obstacle.ContainsPowerup = true;
+                        obstacle.Powerup = Powerup;
                     }
                     Obstacles.add(obstacle);
                 }
@@ -105,14 +127,7 @@ public class Map extends JFrame{
             //TODO: collision detection a player körül (más nem interaktál)
             //TODO: robbanás kezelése: akadályok lebontása, ami alatt van powerup, az jelenjen meg
         }
-    }
-
-    //bomba lerakás (Player hívja Action gomb hatására)
-    public static void PlaceBomb(Player bomber){
-        //Bomb bomb = new Bomb(...);
-        //TODO: Bombs.add() annak vizsgálatával, hogy van-e már az adott helyen bomba
-        // + hogy szeretnénk megcsinálni a sprite-ok animációit?
-        //Bomb.Align();
+        //TODO: bombáé
     }
 
     @Override
@@ -130,7 +145,11 @@ public class Map extends JFrame{
 
         //játékelemek kirajzolása
         for (Obstacle obstacle: Obstacles) {
-            buffer.drawImage(obstacle.currentSprite, obstacle.position[0], obstacle.position[1], null);
+            if(obstacle.ContainsPowerup){
+                buffer.drawImage(obstacle.Powerup.currentSprite, obstacle.position[0], obstacle.position[1], null);
+            }else {
+                buffer.drawImage(obstacle.currentSprite, obstacle.position[0], obstacle.position[1], null);
+            }
         }
 
         for (Player player: Players) {

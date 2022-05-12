@@ -20,10 +20,28 @@ public class Player extends Element implements KeyListener {
     private boolean RightPressed = false;
     private boolean ActionPressed = false;
 
-    //TODO: animáció (?)
+    //TODO: animációnál kivagdossuk a nagy képből a kicsiket
 
-    public Player(BufferedImage sprite, int[] position) {
-        super(sprite, position);
+    private BufferedImage[][] Sprites;
+
+    private final int spriteHeight = 48;
+    private final int spriteWidth = 32;
+
+    //TODO: sprite map-ek rajzolása
+    public Player(BufferedImage sprite_map, int[] position) {
+
+        super(sprite_map, position);
+
+        int rows = sprite_map.getHeight() / spriteHeight;
+        int cols = sprite_map.getWidth() / spriteWidth;
+        Sprites = new BufferedImage[rows][cols];
+        for (int row = 0; row < rows; row++) {
+            for (int col = 0; col < cols; col++) {
+                Sprites[row][col] = sprite_map.getSubimage(col * spriteWidth, row * spriteHeight, spriteWidth, spriteHeight);
+            }
+        }
+
+        currentSprite = Sprites[0][0];
     }
 
     @Override
@@ -96,7 +114,24 @@ public class Player extends Element implements KeyListener {
             position[0] = position[0] + Speed;
         }
         if(ActionPressed){
-            Map.PlaceBomb(this);
+            PlaceBomb();
         }
+        //TODO: currentsprite-ot kiszedni az animált sprite mapból az irány és a jelenlegi sprite index alapján
+        //TODO: csinálni ilyen változókat
+    }
+
+    private boolean Collision(){
+        //TODO megnézni az összes dolgot, amivel ütközhet
+        //kitalálni, hogy a bombával hogyan működjön lerakás után
+        return false;
+    }
+
+    //bomba lerakás (Player hívja Action gomb hatására)
+    private void PlaceBomb(){
+        //Bomb bomb = new Bomb(...);
+        //Map.Bombs.add(bomb);
+        //TODO: Bombs.add() annak vizsgálatával, hogy van-e már az adott helyen bomba
+        // + hogy szeretnénk megcsinálni a sprite-ok animációit?
+        //Bomb.Align();
     }
 }

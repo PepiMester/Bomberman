@@ -3,63 +3,57 @@ package com.brszt.swingdemo;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
-import java.awt.image.BufferedImage;
 
 public class GameWindow extends JFrame implements ActionListener {
 
-    private Container contentframe = null;
-    private JPanel mainmenu = new JPanel();
-    public volatile boolean ingame = false;
-    private GraphicContent map = null;
-    //ide meg lehetne adni többféle dolgot is, ha pl. az ablak tartalmát szeretnénk cserélgetni
+    private JPanel mainmenu;
+    private volatile boolean ingame = false;
+    private Map map;
 
-    public GameWindow(String title, GraphicContent map){
+    public GameWindow(String title, Map map){
         super(title);
         this.map = map;
         Initialize();
     }
 
     private void Initialize(){
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);     //így lehet bezárni az ablakot X-szel
-        setSize(600,400);
 
-        contentframe = getContentPane();                    //menü felépítése...
-        contentframe.setBackground(Color.black);
-        contentframe.setLayout(new CardLayout(150, 100));
+        getContentPane().setBackground(Color.black);
+        getContentPane().setLayout(new CardLayout(50, 180));
+
+        this.mainmenu = new JPanel();
 
         mainmenu.setBackground(null);
-        mainmenu.setLayout(new GridLayout(3, 1, 30, 20));
+        mainmenu.setLayout(new GridLayout(2, 1, 30, 20));
 
         JButton btnStartServer = new JButton("Új játék indítása");
         JButton btnJoinButton = new JButton("Csatlakozás");
-        JButton btnExtra = new JButton("Ez a gomb pedig eltünteti a menüt");
 
         btnStartServer.setBackground(Color.darkGray);
         btnJoinButton.setBackground(Color.darkGray);
-        btnExtra.setBackground(Color.darkGray);
 
         btnStartServer.setForeground(Color.lightGray);
         btnJoinButton.setForeground(Color.lightGray);
-        btnExtra.setForeground(Color.lightGray);
 
         btnStartServer.setFocusPainted(false);
         btnJoinButton.setFocusPainted(false);
-        btnExtra.setFocusPainted(false);
 
         btnStartServer.setActionCommand("startCommand");    //ide bármilyen szöveget meg lehet adni
         btnJoinButton.setActionCommand("joinCommand");
-        btnExtra.setActionCommand("hallod tesa");
 
         btnStartServer.addActionListener(this);
         btnJoinButton.addActionListener(this);
-        btnExtra.addActionListener(this);
 
         mainmenu.add(btnStartServer);
         mainmenu.add(btnJoinButton);
-        mainmenu.add(btnExtra);
 
-        contentframe.add(mainmenu);
+        getContentPane().add(mainmenu);
 
+        setDefaultCloseOperation(EXIT_ON_CLOSE);     //így lehet bezárni az ablakot X-szel
+        getContentPane().setPreferredSize(new Dimension(map.width * 32 + getInsets().left + getInsets().right, map.height * 32 + getInsets().top + getInsets().bottom));
+        setResizable(false);
+        pack();
+        setLocationRelativeTo(null);    //ablak középre igazítása a képernyőn
         setVisible(true);
     }
 
@@ -69,17 +63,30 @@ public class GameWindow extends JFrame implements ActionListener {
         System.out.println(actionEvent.paramString());
 
         //demó, az ablak tartalmát változtatja meg
-        if(actionEvent.getActionCommand().equals("hallod tesa")){
-            this.contentframe.remove(mainmenu);
+        if(actionEvent.getActionCommand().equals("startCommand"))
+        {
+            getContentPane().remove(mainmenu);
             JOptionPane.showMessageDialog(this, "nahát mi történt");
+            addKeyListener(Map.Objects.get(0));
             ingame = true;
         }
+        else if(actionEvent.getActionCommand().equals("joinCommand"))
+        {
+            getContentPane().remove(mainmenu);
+            String target = JOptionPane.showInputDialog(this, "HOVA");
+            System.out.println("Csatlakozás ide: " + target);
+            ingame = true;
+        }
+    }
+
+    public boolean isInGame(){
+        return ingame;
     }
 
     @Override
     public void paint(Graphics g){
         if(ingame) {
-            g.drawImage(map.mapcontent, getInsets().left, getInsets().top, null);
+            g.drawImage(map.content, getInsets().left, getInsets().top, null);
         }
     }
 }

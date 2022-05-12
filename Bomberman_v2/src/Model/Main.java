@@ -20,7 +20,7 @@ public class Main {
                 while(true)
                 {
                         GeneralTimer = System.currentTimeMillis();
-                        delta += (GeneralTimer-lastTime) / 10;
+                        delta += (GeneralTimer-lastTime) / 20;
                         lastTime = GeneralTimer;
 
                         if(delta >= 1){

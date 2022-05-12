@@ -50,8 +50,8 @@ public class Map extends JFrame{
         readSprites();
 
         //játékosok lerakása a pálya átelennes sarkaiba
-        Players.add(new Player(Sprites.get("Player1_sprites"), new int[] {32, 32}));
-        Players.add(new Player(Sprites.get("Player2_sprites"), new int[] {(map_width-2) * 32,  (map_height-2) * 32}));
+        Players.add(new Player(Sprites.get("Player1_sprites"), new int[] {34, 32}));
+        Players.add(new Player(Sprites.get("Player2_sprites"), new int[] {(map_width-2) * 32 + 2,  (map_height-2) * 32}));
 
         //véletlenszám-generátor a power-upokhoz
         Random rand = new Random();
@@ -109,6 +109,9 @@ public class Map extends JFrame{
         }
 
         //A játék egyetlen ablakának létrehozása
+
+        setIconImage(new ImageIcon("./src/Sprites/player1_.png").getImage());
+
         setDefaultCloseOperation(EXIT_ON_CLOSE);     //így lehet bezárni az ablakot X-szel
         getContentPane().setPreferredSize(new Dimension(map_width * 32 + getInsets().left + getInsets().right, map_height * 32 + getInsets().top + getInsets().bottom));
         setResizable(false);

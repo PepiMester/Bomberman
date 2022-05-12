@@ -20,14 +20,13 @@ public class Player extends Element implements KeyListener {
     private boolean RightPressed = false;
     private boolean ActionPressed = false;
 
-    //TODO: animációnál kivagdossuk a nagy képből a kicsiket
-
+    private int animation_step = 0;
+    private int sprite_direction = 2;
     private BufferedImage[][] Sprites;
 
     private final int spriteHeight = 36;
     private final int spriteWidth = 28;
 
-    //TODO: sprite map-ek rajzolása
     public Player(BufferedImage sprite_map, int[] position) {
 
         super(sprite_map, position);
@@ -41,7 +40,7 @@ public class Player extends Element implements KeyListener {
             }
         }
 
-        currentSprite = Sprites[0][0];
+        currentSprite = Sprites[2][0];
     }
 
     @Override
@@ -103,21 +102,31 @@ public class Player extends Element implements KeyListener {
     public void Update() {
         if(UpPressed){
             position[1] = position[1] - Speed;
+            sprite_direction = 3;
+            animation_step++;
         }
         if(DownPressed){
             position[1] = position[1] + Speed;
+            sprite_direction = 2;
+            animation_step++;
         }
         if(LeftPressed){
             position[0] = position[0] - Speed;
+            sprite_direction = 1;
+            animation_step++;
         }
         if(RightPressed){
             position[0] = position[0] + Speed;
+            sprite_direction = 0;
+            animation_step++;
         }
         if(ActionPressed){
             PlaceBomb();
         }
-        //TODO: currentsprite-ot kiszedni az animált sprite mapból az irány és a jelenlegi sprite index alapján
-        //TODO: csinálni ilyen változókat
+        if(animation_step>=32 || (!LeftPressed && !RightPressed && !UpPressed && !DownPressed)){
+            animation_step = 0;
+        }
+        currentSprite = Sprites[sprite_direction][animation_step/8];
     }
 
     private boolean Collision(){

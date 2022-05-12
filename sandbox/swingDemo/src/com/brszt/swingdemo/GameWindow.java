@@ -3,15 +3,19 @@ package com.brszt.swingdemo;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.awt.image.BufferedImage;
 
 public class GameWindow extends JFrame implements ActionListener {
 
     private Container contentframe = null;
     private JPanel mainmenu = new JPanel();
+    public volatile boolean ingame = false;
+    private GraphicContent map = null;
     //ide meg lehetne adni többféle dolgot is, ha pl. az ablak tartalmát szeretnénk cserélgetni
 
-    public GameWindow(String title){
+    public GameWindow(String title, GraphicContent map){
         super(title);
+        this.map = map;
         Initialize();
     }
 
@@ -68,6 +72,14 @@ public class GameWindow extends JFrame implements ActionListener {
         if(actionEvent.getActionCommand().equals("hallod tesa")){
             this.contentframe.remove(mainmenu);
             JOptionPane.showMessageDialog(this, "nahát mi történt");
+            ingame = true;
+        }
+    }
+
+    @Override
+    public void paint(Graphics g){
+        if(ingame) {
+            g.drawImage(map.mapcontent, getInsets().left, getInsets().top, null);
         }
     }
 }

@@ -106,6 +106,10 @@ public class Map{
                 }
             }
         }
+
+        for(int i=0;i< Obstacles.size();i++) {
+            System.out.println("x " + Obstacles.get(i).position[0] + "y " + Obstacles.get(i).position[1]);
+        }
     }
 
     //játékmechanika megvalósítása

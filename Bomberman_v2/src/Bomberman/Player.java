@@ -4,6 +4,8 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.image.BufferedImage;
 
+import static Bomberman.Map.Obstacles;
+
 public class Player extends Element implements KeyListener {
 
     //statok, alapértékekkel
@@ -100,22 +102,25 @@ public class Player extends Element implements KeyListener {
 
     //játékos cselekvései
     public void Update() {
-        if(UpPressed){
+
+        boolean isCollision = Collision();
+
+        if(UpPressed && !isCollision){
             position[1] = position[1] - Speed;
             sprite_direction = 3;
             animation_step++;
         }
-        if(DownPressed){
+        if(DownPressed && !isCollision){
             position[1] = position[1] + Speed;
             sprite_direction = 2;
             animation_step++;
         }
-        if(LeftPressed){
+        if(LeftPressed && !isCollision){
             position[0] = position[0] - Speed;
             sprite_direction = 1;
             animation_step++;
         }
-        if(RightPressed){
+        if(RightPressed && !isCollision){
             position[0] = position[0] + Speed;
             sprite_direction = 0;
             animation_step++;
@@ -130,6 +135,36 @@ public class Player extends Element implements KeyListener {
     }
 
     private boolean Collision(){
+        //falakra
+        for(int i=0; i<Obstacles.size(); i++)
+        {
+
+            if(Obstacles.get(i).position[0]<this.position[0] && LeftPressed && (this.position[0]-Obstacles.get(i).position[0])<42) {
+                System.out.println("LEFT");
+                return true;}
+            if(Obstacles.get(i).position[0]>this.position[0] && RightPressed && (Obstacles.get(i).position[0]-this.position[0])<10) {
+                System.out.println("RIGHT");
+                return true; }
+            if(Obstacles.get(i).position[1]<this.position[1] && DownPressed && (this.position[1]-Obstacles.get(i).position[1])<10) {
+                System.out.println("DOWN");
+                return true; }
+            if(Obstacles.get(i).position[1]>this.position[1] && UpPressed && (Obstacles.get(i).position[1]-this.position[1])<42) {
+                System.out.println("UP");
+                return true; }
+
+
+
+
+            return false;
+        }
+
+        //powerupra
+
+        //bombára
+
+
+        //explosion-re
+
         //TODO megnézni az összes dolgot, amivel ütközhet
         //kitalálni, hogy a bombával hogyan működjön lerakás után
         return false;

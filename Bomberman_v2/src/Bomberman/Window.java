@@ -16,6 +16,12 @@ public class Window extends JFrame implements ActionListener {
         super(title);
         this.map = map;
         Initialize();
+
+        //uncomment this to bypass main menu:
+        getContentPane().remove(mainmenu);
+        addKeyListener(Map.Players.get(0));
+        requestFocusInWindow();
+        gameStarted.countDown();
     }
 
     private void Initialize(){

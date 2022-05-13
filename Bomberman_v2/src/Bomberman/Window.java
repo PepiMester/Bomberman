@@ -4,11 +4,13 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.concurrent.CountDownLatch;
 
 public class Window extends JFrame implements ActionListener {
     private JPanel mainmenu;
-    private volatile boolean ingame = false;
     private Map map;
+
+    public CountDownLatch gameStarted = new CountDownLatch(1);
 
     public Window(String title, Map map){
         super(title);
@@ -64,30 +66,26 @@ public class Window extends JFrame implements ActionListener {
 
         System.out.println(actionEvent.paramString());
 
-        //demó, az ablak tartalmát változtatja meg
         if(actionEvent.getActionCommand().equals("startCommand"))
         {
             getContentPane().remove(mainmenu);
-            JOptionPane.showMessageDialog(this, "nahát mi történt");
             addKeyListener(Map.Players.get(0));
-            ingame = true;
+            requestFocusInWindow();
+            gameStarted.countDown();
         }
         else if(actionEvent.getActionCommand().equals("joinCommand"))
         {
             getContentPane().remove(mainmenu);
             String target = JOptionPane.showInputDialog(this, "HOVA");
             System.out.println("Csatlakozás ide: " + target);
-            ingame = true;
+            requestFocusInWindow();
+            gameStarted.countDown();
         }
-    }
-
-    public boolean isInGame(){
-        return ingame;
     }
 
     @Override
     public void paint(Graphics g){
-        if(ingame) {
+        if(gameStarted.getCount()==0) {
             g.drawImage(map.MapContent, getInsets().left, getInsets().top, null);
         }
     }

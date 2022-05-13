@@ -70,6 +70,7 @@ public class Map{
                 {
                     Obstacles.add(new Obstacle(Sprites.get("UnbreakableObstacle"), position, false));
                 }
+                /*
                 //felrobbantható akadályok véletlenszerű eséllyel, de a játékoshoz 2 mezőnél nem közelebb
                 else if(!((i==1 && j<4) || (i<4 && j==1) || (i== width -2 && j> height -5) || (i> width -5 && j== height -2)))
                 {
@@ -104,6 +105,7 @@ public class Map{
                     }
                     Obstacles.add(obstacle);
                 }
+                */
             }
         }
 

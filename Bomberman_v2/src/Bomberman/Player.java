@@ -136,32 +136,38 @@ public class Player extends Element implements KeyListener {
 
     private boolean Collision(){
         //falakra
+
+        int x_min = 0;
+        int x_max = 0;
+
+        int y_max = this.position[1] + spriteHeight;
+        int y_min = this.position[1] + spriteHeight / 2 - 32;
+
         for(int i=0; i<Obstacles.size(); i++)
         {
 
-            if(Obstacles.get(i).position[0]<this.position[0] && LeftPressed && (this.position[0]-Obstacles.get(i).position[0])<42) {
+            if(Obstacles.get(i).position[0]<this.position[0] && LeftPressed && (this.position[0]-Obstacles.get(i).position[0])<32 &&
+                    (Obstacles.get(i).position[1] > y_min) && (Obstacles.get(i).position[1] < y_max)) {
                 System.out.println("LEFT");
-                return true;}
-            if(Obstacles.get(i).position[0]>this.position[0] && RightPressed && (Obstacles.get(i).position[0]-this.position[0])<10) {
+                return true;
+            }
+            //TODO: a többi irányba is ezzel analóg módon
+            /*
+            if(Obstacles.get(i).position[0]>this.position[0] && RightPressed && (Obstacles.get(i).position[0]-this.position[0])<5) {
                 System.out.println("RIGHT");
                 return true; }
-            if(Obstacles.get(i).position[1]<this.position[1] && DownPressed && (this.position[1]-Obstacles.get(i).position[1])<10) {
+            if(Obstacles.get(i).position[1]<this.position[1] && DownPressed && (this.position[1]-Obstacles.get(i).position[1])<5) {
                 System.out.println("DOWN");
                 return true; }
-            if(Obstacles.get(i).position[1]>this.position[1] && UpPressed && (Obstacles.get(i).position[1]-this.position[1])<42) {
+            if(Obstacles.get(i).position[1]>this.position[1] && UpPressed && (Obstacles.get(i).position[1]-this.position[1])<5) {
                 System.out.println("UP");
                 return true; }
-
-
-
-
-            return false;
+             */
         }
 
         //powerupra
 
         //bombára
-
 
         //explosion-re
 

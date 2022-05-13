@@ -10,7 +10,7 @@ import java.io.File;
 import java.util.HashMap;
 import java.util.Random;
 
-public class Map extends JFrame{
+public class Map{
 
     public static ArrayList<Explosion> Explosions = new ArrayList<Explosion>();
     public static ArrayList<Player> Players = new ArrayList<Player>();
@@ -21,8 +21,10 @@ public class Map extends JFrame{
 
     //konstansok, hogy itt egyszerre lehessen paraméterezni a mapot, ne kelljen mindenhol átírni
     // ha változtatni akarunk esetleg rajta
-    private final int map_width = 15;
-    private final int map_height = 15;
+    public final int width = 15;
+    public final int height = 15;
+
+    public BufferedImage MapContent = new BufferedImage(width * 32, height * 32, BufferedImage.TYPE_INT_RGB);
 
     private void readSprites() {
 
@@ -43,27 +45,24 @@ public class Map extends JFrame{
     }
     public Map() {
 
-        //JFrame ősosztály inicializálása
-        super("Bomberman");
-
         //Sprite-ok beolvasása
         readSprites();
 
         //játékosok lerakása a pálya átelennes sarkaiba
         Players.add(new Player(Sprites.get("Player1_sprites"), new int[] {34, 32}));
-        Players.add(new Player(Sprites.get("Player2_sprites"), new int[] {(map_width-2) * 32 + 2,  (map_height-2) * 32}));
+        Players.add(new Player(Sprites.get("Player2_sprites"), new int[] {(width -2) * 32 + 2,  (height -2) * 32}));
 
         //véletlenszám-generátor a power-upokhoz
         Random rand = new Random();
 
         //pálya létrehozása
-        for (int i=0; i<map_width; i++) {
-            for (int j=0; j<map_height; j++) {
+        for (int i = 0; i< width; i++) {
+            for (int j = 0; j< height; j++) {
 
                 int[] position = new int[] {i*32, j*32};
 
                 //pálya körbe rakása felrobbanthatatlan akadályokkal
-                if(i==0 || i==map_width-1 || j==0 || j==map_height-1) {
+                if(i==0 || i== width -1 || j==0 || j== height -1) {
                     Obstacles.add(new Obstacle(Sprites.get("UnbreakableObstacle"), position, false));
                 }
                 //felrobbanthatatlan akadályok sakktábla szerúen előre megadott potícióban
@@ -72,7 +71,7 @@ public class Map extends JFrame{
                     Obstacles.add(new Obstacle(Sprites.get("UnbreakableObstacle"), position, false));
                 }
                 //felrobbantható akadályok véletlenszerű eséllyel, de a játékoshoz 2 mezőnél nem közelebb
-                else if(!((i==1 && j<4) || (i<4 && j==1) || (i==map_width-2 && j>map_height-5) || (i>map_width-5 && j==map_height-2)))
+                else if(!((i==1 && j<4) || (i<4 && j==1) || (i== width -2 && j> height -5) || (i> width -5 && j== height -2)))
                 {
                     Obstacle obstacle = new Obstacle(Sprites.get("BreakableObstacle"), position, true);
 
@@ -107,20 +106,6 @@ public class Map extends JFrame{
                 }
             }
         }
-
-        //A játék egyetlen ablakának létrehozása
-
-        setIconImage(new ImageIcon("./src/Sprites/player1_.png").getImage());
-
-        setDefaultCloseOperation(EXIT_ON_CLOSE);     //így lehet bezárni az ablakot X-szel
-        getContentPane().setPreferredSize(new Dimension(map_width * 32 + getInsets().left + getInsets().right, map_height * 32 + getInsets().top + getInsets().bottom));
-        setResizable(false);
-        pack();
-        setLocationRelativeTo(null);    //ablak középre igazítása a képernyőn
-        setVisible(true);
-
-        //ezzel rendeljük hozzá a játékoshoz a billentyűlenyomásokat, hogy player 1-et irányítsuk
-        addKeyListener(Players.get(0));
     }
 
     //játékmechanika megvalósítása
@@ -131,20 +116,16 @@ public class Map extends JFrame{
             //TODO: robbanás kezelése: akadályok lebontása, ami alatt van powerup, az jelenjen meg
         }
         //TODO: bombáé
-    }
-
-    @Override
-    public void paint(Graphics g){
 
         //rajzolás buffereléssel: a villogás elkerülése végett egy MapContent bufferbe rajzolunk,
         //majd azt másoljuk ki az ablakra
 
-        BufferedImage MapContent = new BufferedImage(map_width * 32, map_height * 32, BufferedImage.TYPE_INT_RGB);
         Graphics2D buffer = MapContent.createGraphics();
+        buffer.clearRect(0, 0, width * 32, height * 32);
 
         // háttér kitöltése színnel
         buffer.setColor(Color.gray);
-        buffer.fillRect(0, 0, map_width*32, map_height*32);
+        buffer.fillRect(0, 0, width * 32, height * 32);
 
         //játékelemek kirajzolása
         for (Obstacle obstacle: Obstacles) {
@@ -158,9 +139,6 @@ public class Map extends JFrame{
         for (Player player: Players) {
             buffer.drawImage(player.currentSprite, player.position[0], player.position[1], null);
         }
-
-        //bufferelés
-        g.drawImage(MapContent, getInsets().left, getInsets().top,null);
     }
 }
 

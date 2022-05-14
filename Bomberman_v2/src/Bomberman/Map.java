@@ -3,7 +3,6 @@ package Bomberman;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.ArrayList;
-import javax.swing.*;
 import java.awt.*;
 import javax.imageio.ImageIO;
 import java.io.File;
@@ -33,6 +32,7 @@ public class Map{
             Sprites.put("BreakableObstacle", ImageIO.read(new File("./src/Sprites/obstacle.png")));
             Sprites.put("Player1_sprites", ImageIO.read(new File("./src/Sprites/player1.png")));
             Sprites.put("Player2_sprites", ImageIO.read(new File("./src/Sprites/player2.png")));
+            Sprites.put("Bomb_sprites", ImageIO.read(new File("./src/Sprites/bomb.png")));
             Sprites.put("Powerup_HealthBoost", ImageIO.read(new File("./src/Sprites/healthboost.png")));
             Sprites.put("Powerup_ExtraAmmo", ImageIO.read(new File("./src/Sprites/extra_bomb.png")));
             Sprites.put("Powerup_Pierce", ImageIO.read(new File("./src/Sprites/pierce.png")));
@@ -70,7 +70,6 @@ public class Map{
                 {
                     Obstacles.add(new Obstacle(Sprites.get("UnbreakableObstacle"), position, false));
                 }
-                /*
                 //felrobbantható akadályok véletlenszerű eséllyel, de a játékoshoz 2 mezőnél nem közelebb
                 else if(!((i==1 && j<4) || (i<4 && j==1) || (i== width -2 && j> height -5) || (i> width -5 && j== height -2)))
                 {
@@ -105,7 +104,6 @@ public class Map{
                     }
                     Obstacles.add(obstacle);
                 }
-                */
             }
         }
 
@@ -121,7 +119,10 @@ public class Map{
             //TODO: collision detection a player körül (más nem interaktál)
             //TODO: robbanás kezelése: akadályok lebontása, ami alatt van powerup, az jelenjen meg
         }
-        //TODO: bombáé
+
+        for (int i=0; i<Bombs.size(); i++) {
+            Bombs.get(i).Update();
+        }
 
         //rajzolás buffereléssel: a villogás elkerülése végett egy MapContent bufferbe rajzolunk,
         //majd azt másoljuk ki az ablakra
@@ -137,9 +138,15 @@ public class Map{
         for (Obstacle obstacle: Obstacles) {
             if(obstacle.ContainsPowerup){
                 buffer.drawImage(obstacle.Powerup.currentSprite, obstacle.position[0], obstacle.position[1], null);
+                buffer.setColor(Color.red);
+                buffer.drawRect(obstacle.position[0], obstacle.position[1], 31, 31);
             }else {
                 buffer.drawImage(obstacle.currentSprite, obstacle.position[0], obstacle.position[1], null);
             }
+        }
+
+        for (Bomb bomb: Bombs) {
+            buffer.drawImage(bomb.currentSprite, bomb.position[0], bomb.position[1], null);
         }
 
         for (Player player: Players) {

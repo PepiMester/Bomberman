@@ -3,6 +3,7 @@ package Bomberman;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.image.BufferedImage;
+import java.util.Arrays;
 
 import static Bomberman.Map.Obstacles;
 
@@ -15,6 +16,8 @@ public class Player extends Element implements KeyListener {
     private int Pierce = 0;
     private int Speed = 1;
 
+    public int placed_bombs = 0;
+
     //lenyomott billenytűk flag-jei
     private boolean UpPressed = false;
     private boolean DownPressed = false;
@@ -22,6 +25,7 @@ public class Player extends Element implements KeyListener {
     private boolean RightPressed = false;
     private boolean ActionPressed = false;
 
+    private final int game_tick_per_animation_frame = 8;
     private int animation_step = 0;
     private int sprite_direction = 2;
     private BufferedImage[][] Sprites;
@@ -105,33 +109,41 @@ public class Player extends Element implements KeyListener {
 
         boolean isCollision = Collision();
 
-        if(UpPressed && !isCollision){
-            position[1] = position[1] - Speed;
+        if(UpPressed){
+            if(!isCollision) {
+                position[1] = position[1] - Speed;
+            }
             sprite_direction = 3;
             animation_step++;
         }
-        if(DownPressed && !isCollision){
-            position[1] = position[1] + Speed;
+        if(DownPressed){
+            if(!isCollision) {
+                position[1] = position[1] + Speed;
+            }
             sprite_direction = 2;
             animation_step++;
         }
-        if(LeftPressed && !isCollision){
-            position[0] = position[0] - Speed;
+        if(LeftPressed){
+            if(!isCollision) {
+                position[0] = position[0] - Speed;
+            }
             sprite_direction = 1;
             animation_step++;
         }
-        if(RightPressed && !isCollision){
-            position[0] = position[0] + Speed;
+        if(RightPressed){
+            if(!isCollision) {
+                position[0] = position[0] + Speed;
+            }
             sprite_direction = 0;
             animation_step++;
         }
         if(ActionPressed){
             PlaceBomb();
         }
-        if(animation_step>=32 || (!LeftPressed && !RightPressed && !UpPressed && !DownPressed)){
+        if(animation_step>=game_tick_per_animation_frame*4 || (!LeftPressed && !RightPressed && !UpPressed && !DownPressed)){
             animation_step = 0;
         }
-        currentSprite = Sprites[sprite_direction][animation_step/8];
+        currentSprite = Sprites[sprite_direction][animation_step/game_tick_per_animation_frame];
     }
 
     private boolean Collision(){
@@ -148,25 +160,25 @@ public class Player extends Element implements KeyListener {
             //BAL
             if(Obstacles.get(i).position[0]<this.position[0] && LeftPressed && (this.position[0]-Obstacles.get(i).position[0])<32 &&
                     (Obstacles.get(i).position[1] > y_min) && (Obstacles.get(i).position[1] < y_max)) {
-                System.out.println("LEFT");
+                //System.out.println("LEFT");
                 return true;
             }
             //JOBB
             if(Obstacles.get(i).position[0]>this.position[0] && RightPressed && (Obstacles.get(i).position[0]-this.position[0])<28 &&
                     (Obstacles.get(i).position[1] > y_min) && (Obstacles.get(i).position[1] < y_max)) {
-                System.out.println("RIGHT");
+                //System.out.println("RIGHT");
                 return true;
             }
             //FEL
             if(Obstacles.get(i).position[1]<this.position[1] && UpPressed && (this.position[1]-Obstacles.get(i).position[1])<16 &&
                     (Obstacles.get(i).position[0] > x_min) && (Obstacles.get(i).position[0] < x_max)) {
-                System.out.println("UP");
+                //System.out.println("UP");
                 return true;
             }
             //LE
             if(Obstacles.get(i).position[1]>this.position[1] && DownPressed && (Obstacles.get(i).position[1]-this.position[1])<36 &&
                     (Obstacles.get(i).position[0] > x_min) && (Obstacles.get(i).position[0] < x_max)) {
-                System.out.println("DOWN");
+                //System.out.println("DOWN");
                 return true;
             }
 
@@ -197,10 +209,15 @@ public class Player extends Element implements KeyListener {
 
     //bomba lerakás (Player hívja Action gomb hatására)
     private void PlaceBomb(){
-        //Bomb bomb = new Bomb(...);
-        //Map.Bombs.add(bomb);
-        //TODO: Bombs.add() annak vizsgálatával, hogy van-e már az adott helyen bomba
-        // + hogy szeretnénk megcsinálni a sprite-ok animációit?
-        //Bomb.Align();
+        if(placed_bombs < Firepower) {
+            Bomb bomb = new Bomb(Map.Sprites.get("Bomb_sprites"), this.position, this);
+            for (Bomb existing_bomb : Map.Bombs) {
+                if (Arrays.equals(bomb.position, existing_bomb.position)) {
+                    return;
+                }
+            }
+            Map.Bombs.add(bomb);
+            placed_bombs++;
+        }
     }
 }

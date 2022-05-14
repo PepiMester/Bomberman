@@ -5,8 +5,6 @@ import java.awt.event.KeyListener;
 import java.awt.image.BufferedImage;
 
 import static Bomberman.Map.Obstacles;
-import static Bomberman.Map.Powerups;
-import static Bomberman.PowerupType.*;
 
 public class Player extends Element implements KeyListener {
 
@@ -128,7 +126,7 @@ public class Player extends Element implements KeyListener {
             animation_step++;
         }
         if(ActionPressed){
-            //PlaceBomb();
+            PlaceBomb();
         }
         if(animation_step>=32 || (!LeftPressed && !RightPressed && !UpPressed && !DownPressed)){
             animation_step = 0;
@@ -151,29 +149,24 @@ public class Player extends Element implements KeyListener {
             if(Obstacles.get(i).position[0]<this.position[0] && LeftPressed && (this.position[0]-Obstacles.get(i).position[0])<32 &&
                     (Obstacles.get(i).position[1] > y_min) && (Obstacles.get(i).position[1] < y_max)) {
                 System.out.println("LEFT");
-                System.out.println(this.Health);
-                Obstacles.remove(i);
                 return true;
             }
             //JOBB
             if(Obstacles.get(i).position[0]>this.position[0] && RightPressed && (Obstacles.get(i).position[0]-this.position[0])<28 &&
                     (Obstacles.get(i).position[1] > y_min) && (Obstacles.get(i).position[1] < y_max)) {
                 System.out.println("RIGHT");
-                Obstacles.remove(i);
                 return true;
             }
             //FEL
             if(Obstacles.get(i).position[1]<this.position[1] && UpPressed && (this.position[1]-Obstacles.get(i).position[1])<16 &&
                     (Obstacles.get(i).position[0] > x_min) && (Obstacles.get(i).position[0] < x_max)) {
                 System.out.println("UP");
-                Obstacles.remove(i);
                 return true;
             }
             //LE
             if(Obstacles.get(i).position[1]>this.position[1] && DownPressed && (Obstacles.get(i).position[1]-this.position[1])<36 &&
                     (Obstacles.get(i).position[0] > x_min) && (Obstacles.get(i).position[0] < x_max)) {
                 System.out.println("DOWN");
-                Obstacles.remove(i);
                 return true;
             }
 
@@ -192,104 +185,7 @@ public class Player extends Element implements KeyListener {
         }
 
         //powerupra
-         for(int i=0 ; i < Powerups.size(); i++){
-             //BAL
-             if(Powerups.get(i).position[0]<this.position[0] && LeftPressed && (this.position[0]-Powerups.get(i).position[0])<52) {
-                 System.out.println("EZZAZZ");
-                 if (Powerups.get(i).PowerupType == POWER_FIREPOWER){
-                     this.Firepower = 3;
 
-
-                 };
-                 if (Powerups.get(i).PowerupType == POWER_RANGE){
-                     this.Range = 5;
-
-                 };
-                 if (Powerups.get(i).PowerupType == POWER_HEALTH){
-                     this.Health = 5;
-
-                 };
-                 if (Powerups.get(i).PowerupType == POWER_PIERCE){
-                     this.Pierce = 5;
-
-                 };
-                 if (Powerups.get(i).PowerupType == POWER_SPEED){
-                     this.Speed = 5;
-
-                 };
-             }
-             //JOBB
-             if(Powerups.get(i).position[0]>this.position[0] && RightPressed && (Powerups.get(i).position[0]-this.position[0])<58) {
-                 System.out.println("JuhhÚ!");
-                 if (Powerups.get(i).PowerupType == POWER_FIREPOWER){
-                     this.Firepower = 3;
-
-                 };
-                 if (Powerups.get(i).PowerupType == POWER_RANGE){
-                     this.Range = 5;
-
-                 };
-                 if (Powerups.get(i).PowerupType == POWER_HEALTH){
-                     this.Health = 5;
-
-                 };
-                 if (Powerups.get(i).PowerupType == POWER_PIERCE){
-                     this.Pierce = 5;
-
-                 };
-                 if (Powerups.get(i).PowerupType == POWER_SPEED){
-                     this.Speed = 5;
-
-                 };
-             }
-             //FEL
-             if(Powerups.get(i).position[1]<this.position[1] && UpPressed && (this.position[1]-Powerups.get(i).position[1])<56) {
-                 System.out.println("KIRÁLY!");
-                 if (Powerups.get(i).PowerupType == POWER_FIREPOWER){
-                     this.Firepower = 3;
-
-                 };
-                 if (Powerups.get(i).PowerupType == POWER_RANGE){
-                     this.Range = 5;
-
-                 };
-                 if (Powerups.get(i).PowerupType == POWER_HEALTH){
-                     this.Health = 5;
-
-                 };
-                 if (Powerups.get(i).PowerupType == POWER_PIERCE){
-                     this.Pierce = 5;
-
-                 };
-                 if (Powerups.get(i).PowerupType == POWER_SPEED){
-                     this.Speed = 5;
-
-                 };
-             }
-             //LE
-             if(Powerups.get(i).position[1]>this.position[1] && DownPressed && (Powerups.get(i).position[1]-this.position[1])<56) {
-                 System.out.println("ZSÍÍÍÍR");
-                 if (Powerups.get(i).PowerupType == POWER_FIREPOWER){
-                     this.Firepower = 3;
-
-                 };
-                 if (Powerups.get(i).PowerupType == POWER_RANGE){
-                     this.Range = 5;
-
-                 };
-                 if (Powerups.get(i).PowerupType == POWER_HEALTH){
-                     this.Health = 5;
-
-                 };
-                 if (Powerups.get(i).PowerupType == POWER_PIERCE){
-                     this.Pierce = 5;
-
-                 };
-                 if (Powerups.get(i).PowerupType == POWER_SPEED){
-                     this.Speed = 5;
-
-                 };
-         }
         //bombára
 
         //explosion-re
@@ -300,14 +196,11 @@ public class Player extends Element implements KeyListener {
     }
 
     //bomba lerakás (Player hívja Action gomb hatására)
-   /* private void PlaceBomb(){
-            System.out.println("BUMM");
-        }*/
+    private void PlaceBomb(){
         //Bomb bomb = new Bomb(...);
         //Map.Bombs.add(bomb);
         //TODO: Bombs.add() annak vizsgálatával, hogy van-e már az adott helyen bomba
         // + hogy szeretnénk megcsinálni a sprite-ok animációit?
         //Bomb.Align();
-    return false;
     }
 }

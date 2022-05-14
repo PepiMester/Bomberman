@@ -105,7 +105,7 @@ public class Map{
                         obstacle.ContainsPowerup = true;
                         obstacle.Powerup = Powerup;
                     }
-                    Obstacles.add(obstacle);
+                   // Obstacles.add(obstacle);
                 }
 
             }
@@ -149,6 +149,9 @@ public class Map{
 
         for (Bomb bomb: Bombs) {
             buffer.drawImage(bomb.currentSprite, bomb.position[0], bomb.position[1], null);
+        }
+        for (Powerup powerup: Powerups) {
+            buffer.drawImage(powerup.currentSprite, powerup.position[0], powerup.position[1], null);
         }
 
         for (Player player: Players) {

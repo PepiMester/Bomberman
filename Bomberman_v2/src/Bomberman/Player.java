@@ -3,6 +3,7 @@ package Bomberman;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.image.BufferedImage;
+import java.util.Arrays;
 
 import static Bomberman.Map.Obstacles;
 import static Bomberman.Map.Powerups;
@@ -17,6 +18,8 @@ public class Player extends Element implements KeyListener {
     private int Pierce = 0;
     private int Speed = 1;
 
+    public int placed_bombs = 0;
+
     //lenyomott billenytűk flag-jei
     private boolean UpPressed = false;
     private boolean DownPressed = false;
@@ -24,6 +27,7 @@ public class Player extends Element implements KeyListener {
     private boolean RightPressed = false;
     private boolean ActionPressed = false;
 
+    private final int game_tick_per_animation_frame = 8;
     private int animation_step = 0;
     private int sprite_direction = 2;
     private BufferedImage[][] Sprites;
@@ -104,39 +108,57 @@ public class Player extends Element implements KeyListener {
 
     //játékos cselekvései
     public void Update() {
-
         boolean isCollision = Collision();
 
-        if(UpPressed && !isCollision){
-            position[1] = position[1] - Speed;
+        if(UpPressed){
+            if(!isCollision) {
+                position[1] = position[1] - Speed;
+            }
             sprite_direction = 3;
             animation_step++;
         }
-        if(DownPressed && !isCollision){
-            position[1] = position[1] + Speed;
+        if(DownPressed){
+            if(!isCollision) {
+                   position[1] = position[1] + Speed;
+            }
             sprite_direction = 2;
             animation_step++;
         }
-        if(LeftPressed && !isCollision){
-            position[0] = position[0] - Speed;
+        if(LeftPressed){
+            if(!isCollision) {
+                position[0] = position[0] - Speed;
+            }
             sprite_direction = 1;
             animation_step++;
         }
-        if(RightPressed && !isCollision){
-            position[0] = position[0] + Speed;
+        if(RightPressed){
+            if(!isCollision) {
+               position[0] = position[0] + Speed;
+            }
             sprite_direction = 0;
             animation_step++;
         }
         if(ActionPressed){
             PlaceBomb();
         }
-        if(animation_step>=32 || (!LeftPressed && !RightPressed && !UpPressed && !DownPressed)){
+
+        if(animation_step>=game_tick_per_animation_frame*4 || (!LeftPressed && !RightPressed && !UpPressed && !DownPressed)){
             animation_step = 0;
         }
-        currentSprite = Sprites[sprite_direction][animation_step/8];
+        currentSprite = Sprites[sprite_direction][animation_step/game_tick_per_animation_frame];
     }
 
     private void PlaceBomb() {
+        if(placed_bombs < Firepower) {
+            Bomb bomb = new Bomb(Map.Sprites.get("Bomb_sprites"), this.position, this);
+            for (Bomb existing_bomb : Map.Bombs) {
+                if (Arrays.equals(bomb.position, existing_bomb.position)) {
+                    return;
+                }
+            }
+            Map.Bombs.add(bomb);
+            placed_bombs++;
+        }
     }
 
     private boolean Collision(){

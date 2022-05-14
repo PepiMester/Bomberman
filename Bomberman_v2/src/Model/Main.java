@@ -4,11 +4,11 @@ import Bomberman.Map;
 import Bomberman.Window;
 
 public class Main {
-        Double GeneralTime;
         Network.Client Client;
         Network.Server Server;
 
-        public static double GeneralTimer = System.currentTimeMillis();
+        public static long GeneralTimer = System.currentTimeMillis();
+        private static final int GameTick = 20;
 
         public static void main(String[] args) throws InterruptedException {
 
@@ -21,7 +21,7 @@ public class Main {
                 while(true)
                 {
                         GeneralTimer = System.currentTimeMillis();
-                        if((GeneralTimer-lastTime) / 20 >= 1){
+                        if((GeneralTimer-lastTime) / GameTick >= 1){
                                 Game.Update();          //játékmechanikát frissíti
                                 GameWindow.repaint();         //grafikát frissíti
                                 lastTime = GeneralTimer;

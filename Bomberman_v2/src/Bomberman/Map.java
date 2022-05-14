@@ -33,6 +33,7 @@ public class Map{
             Sprites.put("BreakableObstacle", ImageIO.read(new File("./src/Sprites/obstacle.png")));
             Sprites.put("Player1_sprites", ImageIO.read(new File("./src/Sprites/player1.png")));
             Sprites.put("Player2_sprites", ImageIO.read(new File("./src/Sprites/player2.png")));
+            Sprites.put("Bomb_sprites", ImageIO.read(new File("./src/Sprites/bomb.png")));
             Sprites.put("Powerup_HealthBoost", ImageIO.read(new File("./src/Sprites/healthboost.png")));
             Sprites.put("Powerup_ExtraAmmo", ImageIO.read(new File("./src/Sprites/extra_bomb.png")));
             Sprites.put("Powerup_Pierce", ImageIO.read(new File("./src/Sprites/pierce.png")));
@@ -122,7 +123,10 @@ public class Map{
             //TODO: collision detection a player körül (más nem interaktál)
             //TODO: robbanás kezelése: akadályok lebontása, ami alatt van powerup, az jelenjen meg
         }
-        //TODO: bombáé
+
+        for (int i=0; i<Bombs.size(); i++) {
+            Bombs.get(i).Update();
+        }
 
         //rajzolás buffereléssel: a villogás elkerülése végett egy MapContent bufferbe rajzolunk,
         //majd azt másoljuk ki az ablakra
@@ -141,6 +145,10 @@ public class Map{
             }else {
                 buffer.drawImage(obstacle.currentSprite, obstacle.position[0], obstacle.position[1], null);
             }
+        }
+
+        for (Bomb bomb: Bombs) {
+            buffer.drawImage(bomb.currentSprite, bomb.position[0], bomb.position[1], null);
         }
 
         for (Player player: Players) {

@@ -128,12 +128,15 @@ public class Player extends Element implements KeyListener {
             animation_step++;
         }
         if(ActionPressed){
-            //PlaceBomb();
+            PlaceBomb();
         }
         if(animation_step>=32 || (!LeftPressed && !RightPressed && !UpPressed && !DownPressed)){
             animation_step = 0;
         }
         currentSprite = Sprites[sprite_direction][animation_step/8];
+    }
+
+    private void PlaceBomb() {
     }
 
     private boolean Collision(){

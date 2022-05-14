@@ -137,20 +137,39 @@ public class Player extends Element implements KeyListener {
     private boolean Collision(){
         //falakra
 
-        int x_min = 0;
-        int x_max = 0;
+        int x_min = this.position[0]-spriteWidth-2;
+        int x_max = this.position[0]+spriteWidth-1;
 
-        int y_max = this.position[1] + spriteHeight;
+        int y_max = this.position[1] + spriteHeight-3;
         int y_min = this.position[1] + spriteHeight / 2 - 32;
 
         for(int i=0; i<Obstacles.size(); i++)
         {
-
+            //BAL
             if(Obstacles.get(i).position[0]<this.position[0] && LeftPressed && (this.position[0]-Obstacles.get(i).position[0])<32 &&
                     (Obstacles.get(i).position[1] > y_min) && (Obstacles.get(i).position[1] < y_max)) {
                 System.out.println("LEFT");
                 return true;
             }
+            //JOBB
+            if(Obstacles.get(i).position[0]>this.position[0] && RightPressed && (Obstacles.get(i).position[0]-this.position[0])<28 &&
+                    (Obstacles.get(i).position[1] > y_min) && (Obstacles.get(i).position[1] < y_max)) {
+                System.out.println("RIGHT");
+                return true;
+            }
+            //FEL
+            if(Obstacles.get(i).position[1]<this.position[1] && UpPressed && (this.position[1]-Obstacles.get(i).position[1])<16 &&
+                    (Obstacles.get(i).position[0] > x_min) && (Obstacles.get(i).position[0] < x_max)) {
+                System.out.println("UP");
+                return true;
+            }
+            //LE
+            if(Obstacles.get(i).position[1]>this.position[1] && DownPressed && (Obstacles.get(i).position[1]-this.position[1])<36 &&
+                    (Obstacles.get(i).position[0] > x_min) && (Obstacles.get(i).position[0] < x_max)) {
+                System.out.println("DOWN");
+                return true;
+            }
+
             //TODO: a többi irányba is ezzel analóg módon
             /*
             if(Obstacles.get(i).position[0]>this.position[0] && RightPressed && (Obstacles.get(i).position[0]-this.position[0])<5) {

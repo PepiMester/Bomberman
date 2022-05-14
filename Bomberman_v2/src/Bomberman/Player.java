@@ -273,7 +273,7 @@ public class Player extends Element implements KeyListener {
              }
              //FEL
              if(Powerups.get(i).position[1]<this.position[1] && UpPressed && (this.position[1]-Powerups.get(i).position[1])<16&&
-                     (Powerups.get(i).position[1] > y_min) && (Powerups.get(i).position[1] < y_max)) {
+                     (Powerups.get(i).position[0] > x_min) && (Powerups.get(i).position[0] < x_max)) {
                  System.out.println("KIRÁLY!");
                  if (Powerups.get(i).PowerupType == POWER_FIREPOWER){
                      this.Firepower = 8;
@@ -299,7 +299,7 @@ public class Player extends Element implements KeyListener {
              }
              //LE
              if(Powerups.get(i).position[1]>this.position[1] && DownPressed && (Powerups.get(i).position[1]-this.position[1])<36&&
-                     (Powerups.get(i).position[1] > y_min) && (Powerups.get(i).position[1] < y_max)) {
+                     (Powerups.get(i).position[0] > x_min) && (Powerups.get(i).position[0] < x_max)) {
                  System.out.println("ZSÍÍÍÍR");
                  if (Powerups.get(i).PowerupType == POWER_FIREPOWER){
                      this.Firepower = 8;

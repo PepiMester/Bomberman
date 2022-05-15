@@ -3,7 +3,6 @@ package Bomberman;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.ArrayList;
-import javax.swing.*;
 import java.awt.*;
 import javax.imageio.ImageIO;
 import java.io.File;
@@ -34,6 +33,7 @@ public class Map{
             Sprites.put("Player1_sprites", ImageIO.read(new File("./src/Sprites/player1.png")));
             Sprites.put("Player2_sprites", ImageIO.read(new File("./src/Sprites/player2.png")));
             Sprites.put("Bomb_sprites", ImageIO.read(new File("./src/Sprites/bomb.png")));
+            Sprites.put("Explosion_sprites", ImageIO.read(new File("./src/Sprites/explosion.png")));
             Sprites.put("Powerup_HealthBoost", ImageIO.read(new File("./src/Sprites/healthboost.png")));
             Sprites.put("Powerup_ExtraAmmo", ImageIO.read(new File("./src/Sprites/extra_bomb.png")));
             Sprites.put("Powerup_Pierce", ImageIO.read(new File("./src/Sprites/pierce.png")));
@@ -44,6 +44,7 @@ public class Map{
             System.err.println("Nem sikerült beolvasni a képet");
         }
     }
+
     public Map() {
 
         //Sprite-ok beolvasása
@@ -107,13 +108,16 @@ public class Map{
                     }
                    // Obstacles.add(obstacle);
                 }
-
             }
         }
 
-        for(int i=0;i< Obstacles.size();i++) {
+        //TODO: random tesztdoboz az első oszlop alatt, kiszedni!
+        Obstacle obstacle = new Obstacle(Sprites.get("BreakableObstacle"), new int[]{2*32, 3*32}, true);
+        Obstacles.add(obstacle);
+
+        /*for(int i=0;i< Obstacles.size();i++) {
             System.out.println("x " + Obstacles.get(i).position[0] + "y " + Obstacles.get(i).position[1]);
-        }
+        }*/
     }
 
     //játékmechanika megvalósítása
@@ -126,6 +130,10 @@ public class Map{
 
         for (int i=0; i<Bombs.size(); i++) {
             Bombs.get(i).Update();
+        }
+
+        for (int i=0; i<Explosions.size(); i++) {
+            Explosions.get(i).Update();
         }
 
         //rajzolás buffereléssel: a villogás elkerülése végett egy MapContent bufferbe rajzolunk,
@@ -153,9 +161,11 @@ public class Map{
         for (Powerup powerup: Powerups) {
             buffer.drawImage(powerup.currentSprite, powerup.position[0], powerup.position[1], null);
         }
-
         for (Player player: Players) {
             buffer.drawImage(player.currentSprite, player.position[0], player.position[1], null);
+        }
+        for (Explosion explosion: Explosions) {
+            buffer.drawImage(explosion.currentSprite, explosion.position[0], explosion.position[1], null);
         }
     }
 }

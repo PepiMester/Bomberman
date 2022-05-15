@@ -15,7 +15,7 @@ public class Player extends Element implements KeyListener {
     private int Health = 2;
     private int Range = 1;
     private int Firepower = 1;
-    private int Pierce = 0;
+    private int Pierce = 1;
     private int Speed = 1;
 
     public int placed_bombs = 0;
@@ -187,6 +187,26 @@ public class Player extends Element implements KeyListener {
         }
     }
 
+    public int getSpeed() {
+        return Speed;
+    }
+
+    public int getFirepower(){
+        return  Firepower;
+    }
+
+    public int getPierce() {
+        return Pierce;
+    }
+
+    public int getRange() {
+        return Range;
+    }
+
+    public int getHealth() {
+        return Health;
+    }
+
     private boolean Collision(){
         //falakra
 
@@ -201,30 +221,25 @@ public class Player extends Element implements KeyListener {
             //BAL
             if(Obstacles.get(i).position[0]<this.position[0] && LeftPressed && (this.position[0]-Obstacles.get(i).position[0])<33 &&
                     (Obstacles.get(i).position[1] > y_min) && (Obstacles.get(i).position[1] < y_max)) {
-                System.out.println("LEFT");
-                System.out.println(this.Health);
-
+                //System.out.println("LEFT");
                 return true;
             }
             //JOBB
             if(Obstacles.get(i).position[0]>this.position[0] && RightPressed && (Obstacles.get(i).position[0]-this.position[0])<29 &&
                     (Obstacles.get(i).position[1] > y_min) && (Obstacles.get(i).position[1] < y_max)) {
-                System.out.println("RIGHT");
-
+                //System.out.println("RIGHT");
                 return true;
             }
             //FEL
             if(Obstacles.get(i).position[1]<this.position[1] && UpPressed && (this.position[1]-Obstacles.get(i).position[1])<17 &&
                     (Obstacles.get(i).position[0] > x_min) && (Obstacles.get(i).position[0] < x_max)) {
-                System.out.println("UP");
-
+                //System.out.println("UP");
                 return true;
             }
             //LE
             if(Obstacles.get(i).position[1]>this.position[1] && DownPressed && (Obstacles.get(i).position[1]-this.position[1])<38 &&
                     (Obstacles.get(i).position[0] > x_min) && (Obstacles.get(i).position[0] < x_max)) {
-                System.out.println("DOWN");
-
+                //System.out.println("DOWN");
                 return true;
             }
 
@@ -247,7 +262,6 @@ public class Player extends Element implements KeyListener {
             //BAL
              if(Powerups.get(i).position[0]<this.position[0] && LeftPressed && (this.position[0]-Powerups.get(i).position[0])<32&&
                      (Powerups.get(i).position[1] > y_min) && (Powerups.get(i).position[1] < y_max)) {
-                 System.out.println("EZZAZZ");
                  Powerups.get(i).PickupPowerup(this);
                  Powerups.remove(i);
                  return true;
@@ -255,7 +269,6 @@ public class Player extends Element implements KeyListener {
              //JOBB
              if(Powerups.get(i).position[0]>this.position[0] && RightPressed && (Powerups.get(i).position[0]-this.position[0])<28&&
                      (Powerups.get(i).position[1] > y_min) && (Powerups.get(i).position[1] < y_max)) {
-                 System.out.println("JuhhÚ!");
                  Powerups.get(i).PickupPowerup(this);
                  Powerups.remove(i);
                  return true;
@@ -263,7 +276,6 @@ public class Player extends Element implements KeyListener {
              //FEL
              if(Powerups.get(i).position[1]<this.position[1] && UpPressed && (this.position[1]-Powerups.get(i).position[1])<16&&
                      (Powerups.get(i).position[0] > x_min) && (Powerups.get(i).position[0] < x_max)) {
-                 System.out.println("KIRÁLY!");
                  Powerups.get(i).PickupPowerup(this);
                  Powerups.remove(i);
                  return true;
@@ -271,7 +283,6 @@ public class Player extends Element implements KeyListener {
              //LE
              if(Powerups.get(i).position[1]>this.position[1] && DownPressed && (Powerups.get(i).position[1]-this.position[1])<36&&
                      (Powerups.get(i).position[0] > x_min) && (Powerups.get(i).position[0] < x_max)) {
-                 System.out.println("ZSÍÍÍÍR");
                  Powerups.get(i).PickupPowerup(this);
                  Powerups.remove(i);
                  return true;

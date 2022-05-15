@@ -11,16 +11,17 @@ public class Obstacle extends Tile{
 
     public Obstacle(BufferedImage CurrentSprite, int[] position, boolean isDestroyable) {
         super(CurrentSprite, position);
-
+        this.Destroyable = isDestroyable;
         ContainsPowerup = false;
+    }
+
+    public boolean isDestroyable(){
+        return this.Destroyable;
     }
 
     public void Destroy() {
         if (this.Destroyable) {
-
-                Obstacles.remove(this);
-
-                    }
+            Obstacles.remove(this);
+        }
     }
-
 }

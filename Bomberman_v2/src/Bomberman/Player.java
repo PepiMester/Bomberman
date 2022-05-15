@@ -161,19 +161,45 @@ public class Player extends Element implements KeyListener {
         }
     }
 
+    public void increaseFirepower(){
+        if(this.Firepower < 3) {
+            this.Firepower++;
+        }
+    }
+
+    public void increaseRange(){
+        this.Range++;
+    }
+
+    public void increaseHealth(){
+        if(this.Health < 4){
+            this.Health++;
+        }
+    }
+
+    public void increasePierce(){
+        this.Pierce++;
+    }
+
+    public void increaseSpeed(){
+        if(this.Speed < 3){
+            this.Speed++;
+        }
+    }
+
     private boolean Collision(){
         //falakra
 
-        int x_min = this.position[0]-spriteWidth-2;
-        int x_max = this.position[0]+spriteWidth-1;
+        int x_min = this.position[0] - spriteWidth - 2 + 3;
+        int x_max = this.position[0] + spriteWidth - 1 - 3;
 
-        int y_max = this.position[1] + spriteHeight-3;
-        int y_min = this.position[1] + spriteHeight / 2 - 32;
+        int y_min = this.position[1] + spriteHeight / 2 - 32 + 3;
+        int y_max = this.position[1] + spriteHeight - 3 - 3;
 
         for(int i=0; i<Obstacles.size(); i++)
         {
             //BAL
-            if(Obstacles.get(i).position[0]<this.position[0] && LeftPressed && (this.position[0]-Obstacles.get(i).position[0])<32 &&
+            if(Obstacles.get(i).position[0]<this.position[0] && LeftPressed && (this.position[0]-Obstacles.get(i).position[0])<33 &&
                     (Obstacles.get(i).position[1] > y_min) && (Obstacles.get(i).position[1] < y_max)) {
                 System.out.println("LEFT");
                 System.out.println(this.Health);
@@ -181,21 +207,21 @@ public class Player extends Element implements KeyListener {
                 return true;
             }
             //JOBB
-            if(Obstacles.get(i).position[0]>this.position[0] && RightPressed && (Obstacles.get(i).position[0]-this.position[0])<28 &&
+            if(Obstacles.get(i).position[0]>this.position[0] && RightPressed && (Obstacles.get(i).position[0]-this.position[0])<29 &&
                     (Obstacles.get(i).position[1] > y_min) && (Obstacles.get(i).position[1] < y_max)) {
                 System.out.println("RIGHT");
 
                 return true;
             }
             //FEL
-            if(Obstacles.get(i).position[1]<this.position[1] && UpPressed && (this.position[1]-Obstacles.get(i).position[1])<16 &&
+            if(Obstacles.get(i).position[1]<this.position[1] && UpPressed && (this.position[1]-Obstacles.get(i).position[1])<17 &&
                     (Obstacles.get(i).position[0] > x_min) && (Obstacles.get(i).position[0] < x_max)) {
                 System.out.println("UP");
 
                 return true;
             }
             //LE
-            if(Obstacles.get(i).position[1]>this.position[1] && DownPressed && (Obstacles.get(i).position[1]-this.position[1])<36 &&
+            if(Obstacles.get(i).position[1]>this.position[1] && DownPressed && (Obstacles.get(i).position[1]-this.position[1])<38 &&
                     (Obstacles.get(i).position[0] > x_min) && (Obstacles.get(i).position[0] < x_max)) {
                 System.out.println("DOWN");
 
@@ -217,130 +243,57 @@ public class Player extends Element implements KeyListener {
         }
 
         //powerupra
-         for(int i=0 ; i < Powerups.size(); i++){
-             //BAL
+        for(int i=0 ; i < Powerups.size(); i++){
+            //BAL
              if(Powerups.get(i).position[0]<this.position[0] && LeftPressed && (this.position[0]-Powerups.get(i).position[0])<32&&
                      (Powerups.get(i).position[1] > y_min) && (Powerups.get(i).position[1] < y_max)) {
                  System.out.println("EZZAZZ");
-                 if (Powerups.get(i).PowerupType == POWER_FIREPOWER){
-                     this.Firepower = 8;
-                     System.out.println(this.Firepower);
-
-                 };
-                 if (Powerups.get(i).PowerupType == POWER_RANGE){
-                     this.Range = 8;
-                     System.out.println(this.Range);
-
-                 };
-                 if (Powerups.get(i).PowerupType == POWER_HEALTH){
-                     this.Health = 8;
-                     System.out.println(this.Health);
-                 };
-                 if (Powerups.get(i).PowerupType == POWER_PIERCE){
-                     this.Pierce = 8;
-                     System.out.println(this.Pierce);
-                 };
-                 if (Powerups.get(i).PowerupType == POWER_SPEED){
-                     this.Speed = 5;
-                     System.out.println(this.Speed);
-                 }; Powerups.remove(i);
+                 Powerups.get(i).PickupPowerup(this);
+                 Powerups.remove(i);
+                 return true;
              }
              //JOBB
              if(Powerups.get(i).position[0]>this.position[0] && RightPressed && (Powerups.get(i).position[0]-this.position[0])<28&&
                      (Powerups.get(i).position[1] > y_min) && (Powerups.get(i).position[1] < y_max)) {
                  System.out.println("JuhhÚ!");
-                 if (Powerups.get(i).PowerupType == POWER_FIREPOWER){
-                     this.Firepower = 8;
-                     System.out.println(this.Firepower);
-
-                 };
-                 if (Powerups.get(i).PowerupType == POWER_RANGE){
-                     this.Range = 8;
-                     System.out.println(this.Range);
-                 };
-                 if (Powerups.get(i).PowerupType == POWER_HEALTH){
-                     this.Health = 8;
-                     System.out.println(this.Health);
-                 };
-                 if (Powerups.get(i).PowerupType == POWER_PIERCE){
-                     this.Pierce = 8;
-                     System.out.println(this.Pierce);
-                 };
-                 if (Powerups.get(i).PowerupType == POWER_SPEED){
-                     this.Speed = 5;
-                     System.out.println(this.Speed);
-                 }; Powerups.remove(i);
+                 Powerups.get(i).PickupPowerup(this);
+                 Powerups.remove(i);
+                 return true;
              }
              //FEL
              if(Powerups.get(i).position[1]<this.position[1] && UpPressed && (this.position[1]-Powerups.get(i).position[1])<16&&
                      (Powerups.get(i).position[0] > x_min) && (Powerups.get(i).position[0] < x_max)) {
                  System.out.println("KIRÁLY!");
-                 if (Powerups.get(i).PowerupType == POWER_FIREPOWER){
-                     this.Firepower = 8;
-                     System.out.println(this.Firepower);
-
-                 };
-                 if (Powerups.get(i).PowerupType == POWER_RANGE){
-                     this.Range = 8;
-                     System.out.println(this.Range);
-                 };
-                 if (Powerups.get(i).PowerupType == POWER_HEALTH){
-                     this.Health = 8;
-                     System.out.println(this.Health);
-                 };
-                 if (Powerups.get(i).PowerupType == POWER_PIERCE){
-                     this.Pierce = 8;
-                     System.out.println(this.Pierce);
-                 };
-                 if (Powerups.get(i).PowerupType == POWER_SPEED){
-                     this.Speed = 5;
-                     System.out.println(this.Speed);
-                 }; Powerups.remove(i);
+                 Powerups.get(i).PickupPowerup(this);
+                 Powerups.remove(i);
+                 return true;
              }
              //LE
              if(Powerups.get(i).position[1]>this.position[1] && DownPressed && (Powerups.get(i).position[1]-this.position[1])<36&&
                      (Powerups.get(i).position[0] > x_min) && (Powerups.get(i).position[0] < x_max)) {
                  System.out.println("ZSÍÍÍÍR");
-                 if (Powerups.get(i).PowerupType == POWER_FIREPOWER){
-                     this.Firepower = 8;
-                     System.out.println(this.Firepower);
+                 Powerups.get(i).PickupPowerup(this);
+                 Powerups.remove(i);
+                 return true;
+            }
+        }
 
-                 };
-                 if (Powerups.get(i).PowerupType == POWER_RANGE){
-                     this.Range = 8;
-                     System.out.println(this.Range);
-                 };
-                 if (Powerups.get(i).PowerupType == POWER_HEALTH){
-                     this.Health = 8;
-                     System.out.println(this.Health);
-                 };
-                 if (Powerups.get(i).PowerupType == POWER_PIERCE){
-                     this.Pierce = 8;
-                     System.out.println(this.Pierce);
-                 };
-                 if (Powerups.get(i).PowerupType == POWER_SPEED){
-                     this.Speed = 5;
-                     System.out.println(this.Speed);
-                 }; Powerups.remove(i);
-         }
         //bombára
 
         //explosion-re
 
         //TODO megnézni az összes dolgot, amivel ütközhet
         //kitalálni, hogy a bombával hogyan működjön lerakás után
-        return false;
-    }
 
-    //bomba lerakás (Player hívja Action gomb hatására)
-   /* private void PlaceBomb(){
-            System.out.println("BUMM");
-        }*/
-        //Bomb bomb = new Bomb(...);
-        //Map.Bombs.add(bomb);
-        //TODO: Bombs.add() annak vizsgálatával, hogy van-e már az adott helyen bomba
-        // + hogy szeretnénk megcsinálni a sprite-ok animációit?
-        //Bomb.Align();
-    return false;
+        //bomba lerakás (Player hívja Action gomb hatására)
+       /* private void PlaceBomb(){
+                System.out.println("BUMM");
+            }*/
+            //Bomb bomb = new Bomb(...);
+            //Map.Bombs.add(bomb);
+            //TODO: Bombs.add() annak vizsgálatával, hogy van-e már az adott helyen bomba
+            // + hogy szeretnénk megcsinálni a sprite-ok animációit?
+            //Bomb.Align();
+        return false;
     }
 }

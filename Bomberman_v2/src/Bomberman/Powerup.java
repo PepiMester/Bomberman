@@ -2,6 +2,9 @@ package Bomberman;
 
 import java.awt.image.BufferedImage;
 
+import static Bomberman.Map.Powerups;
+import static Bomberman.PowerupType.*;
+
 public class Powerup extends Tile{
 
     public PowerupType PowerupType;
@@ -36,7 +39,23 @@ public class Powerup extends Tile{
     }
 
     public void PickupPowerup(Player player) {
-
+        switch (this.PowerupType){
+            case POWER_FIREPOWER:
+                player.increaseFirepower();
+                break;
+            case POWER_RANGE:
+                player.increaseRange();
+                break;
+            case POWER_HEALTH:
+                player.increaseHealth();
+                break;
+            case POWER_PIERCE:
+                player.increasePierce();
+                break;
+            case POWER_SPEED:
+                player.increaseSpeed();
+                break;
+        }
     }
 
 }

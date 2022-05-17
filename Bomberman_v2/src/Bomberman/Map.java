@@ -25,8 +25,20 @@ public class Map{
 
     public BufferedImage MapContent = new BufferedImage(width * 32, height * 32, BufferedImage.TYPE_INT_RGB);
 
-    private void readSprites() {
+    public Map()
+    {
+        //Sprite-ok beolvasása
+        readSprites();
 
+        //játékosok lerakása a pálya átelennes sarkaiba
+        Players.add(new Player(Sprites.get("Player1_sprites"), new int[] {34, 32}));
+        Players.add(new Player(Sprites.get("Player2_sprites"), new int[] {(width -2) * 32 + 2,  (height -2) * 32}));
+
+        generateMap();
+    }
+
+    private void readSprites()
+    {
         try {
             Sprites.put("UnbreakableObstacle", ImageIO.read(new File("./src/Sprites/wall.png")));
             Sprites.put("BreakableObstacle", ImageIO.read(new File("./src/Sprites/obstacle.png")));
@@ -45,15 +57,8 @@ public class Map{
         }
     }
 
-    public Map() {
-
-        //Sprite-ok beolvasása
-        readSprites();
-
-        //játékosok lerakása a pálya átelennes sarkaiba
-        Players.add(new Player(Sprites.get("Player1_sprites"), new int[] {34, 32}));
-        Players.add(new Player(Sprites.get("Player2_sprites"), new int[] {(width -2) * 32 + 2,  (height -2) * 32}));
-
+    private void generateMap()
+    {
         //véletlenszám-generátor a power-upokhoz
         Random rand = new Random();
 
@@ -102,10 +107,9 @@ public class Map{
                         }
 
                         Powerup Powerup = new Powerup(tipus, position);
-                        obstacle.ContainsPowerup = true;
-                        obstacle.Powerup = Powerup;
+                        obstacle.AddPowerup(Powerup);
                     }
-                   Obstacles.add(obstacle);
+                    Obstacles.add(obstacle);
                 }
             }
         }
@@ -118,9 +122,16 @@ public class Map{
         }
         for (int i=0; i<Bombs.size(); i++) {
             Bombs.get(i).Update();
+            if(Bombs.get(i).isDetonated()){
+                Explosion.Spawn(Bombs.get(i));
+                Bombs.remove(i);
+            }
         }
         for (int i=0; i<Explosions.size(); i++) {
             Explosions.get(i).Update();
+            if(Explosions.get(i).isDecayed()){
+                Explosions.remove(i);
+            }
         }
         for (int i=0; i<Obstacles.size(); i++) {
             if(Obstacles.get(i).ExplosionOnTile) {

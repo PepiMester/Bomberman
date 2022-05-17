@@ -5,8 +5,7 @@ import java.awt.event.KeyListener;
 import java.awt.image.BufferedImage;
 import java.util.Arrays;
 
-import static Bomberman.Map.Obstacles;
-import static Bomberman.Map.Powerups;
+import static Bomberman.Map.*;
 import static Bomberman.PowerupType.*;
 
 public class Player extends Element implements KeyListener {
@@ -18,7 +17,7 @@ public class Player extends Element implements KeyListener {
     private int Pierce = 1;
     private int Speed = 1;
 
-    public int placed_bombs = 0;
+    private int placed_bombs = 0;
 
     //lenyomott billenytűk flag-jei
     private boolean UpPressed = false;
@@ -151,13 +150,19 @@ public class Player extends Element implements KeyListener {
     private void PlaceBomb() {
         if(placed_bombs < Firepower) {
             Bomb bomb = new Bomb(Map.Sprites.get("Bomb_sprites"), this.position, this);
-            for (Bomb existing_bomb : Map.Bombs) {
+            for (Bomb existing_bomb : Bombs) {
                 if (Arrays.equals(bomb.position, existing_bomb.position)) {
                     return;
                 }
             }
-            Map.Bombs.add(bomb);
+            Bombs.add(bomb);
             placed_bombs++;
+        }
+    }
+
+    public void restock(){
+        if(placed_bombs>0) {
+            placed_bombs--;
         }
     }
 
@@ -185,14 +190,6 @@ public class Player extends Element implements KeyListener {
         if(this.Speed < 3){
             this.Speed++;
         }
-    }
-
-    public int getSpeed() {
-        return Speed;
-    }
-
-    public int getFirepower(){
-        return  Firepower;
     }
 
     public int getPierce() {

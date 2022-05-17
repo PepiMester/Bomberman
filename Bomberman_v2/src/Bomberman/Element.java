@@ -4,8 +4,8 @@ import java.awt.image.BufferedImage;
 
 public abstract class Element {
 
-    public BufferedImage currentSprite;
-    public int[] position;
+    protected BufferedImage currentSprite;
+    protected int[] position;
 
     public Element(BufferedImage sprite, int[] position) {
         this.position = new int[2];

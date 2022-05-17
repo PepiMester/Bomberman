@@ -1,14 +1,8 @@
 package Bomberman;
 
-import java.awt.image.BufferedImage;
-
-import static Bomberman.Map.Powerups;
-import static Bomberman.PowerupType.*;
-
 public class Powerup extends Tile{
 
     public PowerupType PowerupType;
-    public double PowerupTimer;
 
     public Powerup(PowerupType poweruptype, int[] position) {
         super(null, position);
@@ -57,5 +51,4 @@ public class Powerup extends Tile{
                 break;
         }
     }
-
 }

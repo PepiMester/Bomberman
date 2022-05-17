@@ -1,14 +1,13 @@
 package Bomberman;
 
 import java.awt.image.BufferedImage;
-
 import static Bomberman.Map.Obstacles;
 import static Bomberman.Map.Powerups;
 
 public class Obstacle extends Tile{
 
-    public boolean ContainsPowerup;
-    public Powerup Powerup;
+    private Powerup Powerup;
+    private boolean ContainsPowerup;
 
     public Obstacle(BufferedImage CurrentSprite, int[] position, boolean isDestroyable) {
         super(CurrentSprite, position);
@@ -20,9 +19,14 @@ public class Obstacle extends Tile{
         return this.Destroyable;
     }
 
+    public void AddPowerup(Powerup powerup){
+        this.ContainsPowerup = true;
+        this.Powerup = powerup;
+    }
+
     public void Destroy() {
-        if (this.Destroyable) {
-            if(this.ContainsPowerup){
+        if (Destroyable) {
+            if(ContainsPowerup){
                 Powerups.add(this.Powerup);
             }
             Obstacles.remove(this);

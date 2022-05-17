@@ -1,16 +1,73 @@
 package Bomberman;
 
 import java.awt.image.BufferedImage;
+import java.util.Arrays;
+
+import static Bomberman.Map.Explosions;
 
 public class Explosion extends Element{
 
-    public int ExplosionTimer;
+    private int ExplosionTimer;
     private BufferedImage[][] Sprites;
     private ExplosionType explosiontype;
 
     private final int spriteHeight = 32;
     private final int spriteWidth = 32;
     private final int animation_speed = 2;
+    private boolean decayed = false;
+
+    public static void Spawn(Bomb bomb){
+        //SPAWN EXPLOSION
+
+        final int[] explosion_start_position = bomb.position.clone();
+        int[] current_position = bomb.position.clone();
+
+        ExplosionType type;
+
+        //robbanás közepe ott, ahol a bomba volt
+        Explosions.add(new Explosion(Map.Sprites.get("Explosion_sprites"), current_position, ExplosionType.CENTER));
+
+        //irányonként iterálunk végig az útba eső akadályokon a robbanás generálása során
+        ExplosionType[] explosion_head = {ExplosionType.LEFT_END, ExplosionType.RIGHT_END, ExplosionType.TOP_END, ExplosionType.BOTTOM_END};
+        ExplosionType[] explosion_column = {ExplosionType.HORIZONTAL, ExplosionType.HORIZONTAL, ExplosionType.VERTICAL, ExplosionType.VERTICAL};
+
+        for(int dir = 0; dir < 4; dir++)
+        {
+            boolean explosion_end = false;
+            int current_pierce = bomb.getPlanter().getPierce();
+            current_position = bomb.position.clone();
+
+            for(int i=1; i<=bomb.getPlanter().getRange(); i++){
+                current_position[dir / 2] = explosion_start_position[dir / 2] + i * 32 * (dir % 2 > 0 ? 1 : -1);
+                for(Obstacle obstacle : Map.Obstacles){
+                    if(Arrays.equals(obstacle.position, current_position))
+                    {
+                        if(obstacle.isDestroyable() && current_pierce!=0)
+                        {
+                            //doboz
+                            obstacle.ExplosionOnTile = true;
+                            current_pierce--;
+                            break;
+                        }else{
+                            //fal
+                            explosion_end = true;
+                            break;
+                        }
+                    }
+                }
+                if(explosion_end) {
+                    break;
+                }else{
+                    if(i==bomb.getPlanter().getRange()){
+                        type = explosion_head[dir];
+                    }else{
+                        type = explosion_column[dir];
+                    }
+                    Explosions.add(new Explosion(Map.Sprites.get("Explosion_sprites"), current_position, type));
+                }
+            }
+        }
+    }
 
     public Explosion(BufferedImage sprite_map, int[] position, ExplosionType type) {
         super(sprite_map, position);
@@ -29,6 +86,10 @@ public class Explosion extends Element{
         ExplosionTimer = 0;
     }
 
+    public boolean isDecayed(){
+        return decayed;
+    }
+
     @Override
     public void Update() {
         // Animate sprite
@@ -37,10 +98,8 @@ public class Explosion extends Element{
 
         if(sprite_index==9){
             //itt lesz vége az animációnak
-            Map.Explosions.remove(this);
-        }
-        else
-        {
+            decayed = true;
+        } else {
             DrawExplosion(sprite_index);
         }
     }

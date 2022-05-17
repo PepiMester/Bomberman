@@ -4,12 +4,11 @@ import java.awt.image.BufferedImage;
 
 public class Tile extends Element {
 
-    public boolean Destroyable;
-    public boolean ExplosionOnTile;
+    protected boolean Destroyable;
+    protected boolean ExplosionOnTile;
 
     public Tile(BufferedImage sprite, int[] position) {
         super(sprite, position);
         ExplosionOnTile = false;
     }
-
 }

@@ -3,6 +3,7 @@ package Bomberman;
 import java.awt.image.BufferedImage;
 
 import static Bomberman.Map.Obstacles;
+import static Bomberman.Map.Powerups;
 
 public class Obstacle extends Tile{
 
@@ -21,6 +22,9 @@ public class Obstacle extends Tile{
 
     public void Destroy() {
         if (this.Destroyable) {
+            if(this.ContainsPowerup){
+                Powerups.add(this.Powerup);
+            }
             Obstacles.remove(this);
         }
     }

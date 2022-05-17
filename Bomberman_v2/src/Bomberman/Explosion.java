@@ -6,12 +6,10 @@ public class Explosion extends Element{
 
     public int ExplosionTimer;
     private BufferedImage[][] Sprites;
-
     private ExplosionType explosiontype;
 
     private final int spriteHeight = 32;
     private final int spriteWidth = 32;
-
     private final int animation_speed = 2;
 
     public Explosion(BufferedImage sprite_map, int[] position, ExplosionType type) {
@@ -27,30 +25,7 @@ public class Explosion extends Element{
         }
 
         explosiontype = type;
-
-        switch (explosiontype){
-            case CENTER:
-                currentSprite = Sprites[0][0];
-                break;
-            case HORIZONTAL:
-                currentSprite = Sprites[1][0];
-                break;
-            case VERTICAL:
-                currentSprite = Sprites[2][0];
-                break;
-            case LEFT_END:
-                currentSprite = Sprites[3][0];
-                break;
-            case RIGHT_END:
-                currentSprite = Sprites[4][0];
-                break;
-            case TOP_END:
-                currentSprite = Sprites[5][0];
-                break;
-            case BOTTOM_END:
-                currentSprite = Sprites[6][0];
-                break;
-        }
+        DrawExplosion(0);
         ExplosionTimer = 0;
     }
 
@@ -63,33 +38,36 @@ public class Explosion extends Element{
         if(sprite_index==9){
             //itt lesz vége az animációnak
             Map.Explosions.remove(this);
-            //TODO rombolni
         }
         else
         {
-            switch (explosiontype) {
-                case CENTER:
-                    currentSprite = Sprites[0][sprite_index];
-                    break;
-                case HORIZONTAL:
-                    currentSprite = Sprites[1][sprite_index];
-                    break;
-                case VERTICAL:
-                    currentSprite = Sprites[2][sprite_index];
-                    break;
-                case LEFT_END:
-                    currentSprite = Sprites[3][sprite_index];
-                    break;
-                case RIGHT_END:
-                    currentSprite = Sprites[4][sprite_index];
-                    break;
-                case TOP_END:
-                    currentSprite = Sprites[5][sprite_index];
-                    break;
-                case BOTTOM_END:
-                    currentSprite = Sprites[6][sprite_index];
-                    break;
-            }
+            DrawExplosion(sprite_index);
+        }
+    }
+
+    private void DrawExplosion(int sprite_index){
+        switch (this.explosiontype) {
+            case CENTER:
+                currentSprite = Sprites[0][sprite_index];
+                break;
+            case HORIZONTAL:
+                currentSprite = Sprites[1][sprite_index];
+                break;
+            case VERTICAL:
+                currentSprite = Sprites[2][sprite_index];
+                break;
+            case LEFT_END:
+                currentSprite = Sprites[3][sprite_index];
+                break;
+            case RIGHT_END:
+                currentSprite = Sprites[4][sprite_index];
+                break;
+            case TOP_END:
+                currentSprite = Sprites[5][sprite_index];
+                break;
+            case BOTTOM_END:
+                currentSprite = Sprites[6][sprite_index];
+                break;
         }
     }
 }

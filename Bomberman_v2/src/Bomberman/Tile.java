@@ -9,6 +9,7 @@ public class Tile extends Element {
 
     public Tile(BufferedImage sprite, int[] position) {
         super(sprite, position);
+        ExplosionOnTile = false;
     }
 
 }

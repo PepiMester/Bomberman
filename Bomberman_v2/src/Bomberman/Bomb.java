@@ -50,147 +50,49 @@ public class Bomb extends Tile {
         final int[] explosion_start_position = this.position.clone();
         int[] current_position = this.position.clone();
 
-        int current_pierce;
-        boolean explosion_end;
-
         ExplosionType type;
 
         //robbanás közepe ott, ahol a bomba volt
         Map.Explosions.add(new Explosion(Map.Sprites.get("Explosion_sprites"), current_position, ExplosionType.CENTER));
 
-        //jobbra:
-        current_pierce = this.planter.getPierce();
-        current_position = this.position.clone();
-        explosion_end = false;
+        //irányonként iterálunk végig az útba eső akadályokon a robbanás generálása során
+        ExplosionType[] explosion_head = {ExplosionType.LEFT_END, ExplosionType.RIGHT_END, ExplosionType.TOP_END, ExplosionType.BOTTOM_END};
+        ExplosionType[] explosion_column = {ExplosionType.HORIZONTAL, ExplosionType.HORIZONTAL, ExplosionType.VERTICAL, ExplosionType.VERTICAL};
 
-        for(int i=1; i<=this.planter.getRange(); i++){
-            current_position[0] = explosion_start_position[0] + i * 32;
-            for(Obstacle obstacle : Map.Obstacles){
-                if(Arrays.equals(obstacle.position, current_position))
-                {
-                    System.out.println("akadály van");
-                    if(obstacle.isDestroyable() && current_pierce!=0) {
-                        //doboz
-                        current_pierce--;
-                        break;
-                    }else{
-                        //fal
-                        explosion_end = true;
-                        break;
+        for(int dir = 0; dir < 4; dir++)
+        {
+            boolean explosion_end = false;
+            int current_pierce = this.planter.getPierce();
+            current_position = this.position.clone();
+
+            for(int i=1; i<=this.planter.getRange(); i++){
+                current_position[dir / 2] = explosion_start_position[dir / 2] + i * 32 * (dir % 2 > 0 ? 1 : -1);
+                for(Obstacle obstacle : Map.Obstacles){
+                    if(Arrays.equals(obstacle.position, current_position))
+                    {
+                        if(obstacle.isDestroyable() && current_pierce!=0)
+                        {
+                            //doboz
+                            obstacle.ExplosionOnTile = true;
+                            current_pierce--;
+                            break;
+                        }else{
+                            //fal
+                            explosion_end = true;
+                            break;
+                        }
                     }
                 }
-            }
-            if(explosion_end) {
-                break;
-            }else{
-                if(i==this.planter.getRange()){
-                    type = ExplosionType.RIGHT_END;
+                if(explosion_end) {
+                    break;
                 }else{
-                    type = ExplosionType.HORIZONTAL;
-                }
-                Map.Explosions.add(new Explosion(Map.Sprites.get("Explosion_sprites"), current_position, type));
-            }
-        }
-
-        //balra:
-        current_pierce = this.planter.getPierce();
-        current_position = this.position.clone();
-        explosion_end = false;
-
-        for(int i=1; i<=this.planter.getRange(); i++){
-            current_position[0] = explosion_start_position[0] - i * 32;
-            for(Obstacle obstacle : Map.Obstacles){
-                if(Arrays.equals(obstacle.position, current_position))
-                {
-                    System.out.println("akadály van");
-                    if(obstacle.isDestroyable() && current_pierce!=0) {
-                        //doboz
-                        current_pierce--;
-                        break;
+                    if(i==this.planter.getRange()){
+                        type = explosion_head[dir];
                     }else{
-                        //fal
-                        explosion_end = true;
-                        break;
+                        type = explosion_column[dir];
                     }
+                    Map.Explosions.add(new Explosion(Map.Sprites.get("Explosion_sprites"), current_position, type));
                 }
-            }
-            if(explosion_end) {
-                break;
-            }else{
-                if(i==this.planter.getRange()){
-                    type = ExplosionType.LEFT_END;
-                }else{
-                    type = ExplosionType.HORIZONTAL;
-                }
-                Map.Explosions.add(new Explosion(Map.Sprites.get("Explosion_sprites"), current_position, type));
-            }
-        }
-
-        //fel:
-        current_pierce = this.planter.getPierce();
-        current_position = this.position.clone();
-        explosion_end = false;
-
-        for(int i=1; i<=this.planter.getRange(); i++){
-            current_position[1] = explosion_start_position[1] - i * 32;
-            for(Obstacle obstacle : Map.Obstacles){
-                if(Arrays.equals(obstacle.position, current_position))
-                {
-                    System.out.println("akadály van");
-                    if(obstacle.isDestroyable() && current_pierce!=0) {
-                        //doboz
-                        current_pierce--;
-                        break;
-                    }else{
-                        //fal
-                        explosion_end = true;
-                        break;
-                    }
-                }
-            }
-            if(explosion_end) {
-                break;
-            }else{
-                if(i==this.planter.getRange()){
-                    type = ExplosionType.TOP_END;
-                }else{
-                    type = ExplosionType.VERTICAL;
-                }
-                Map.Explosions.add(new Explosion(Map.Sprites.get("Explosion_sprites"), current_position, type));
-            }
-        }
-
-        //balra:
-        current_pierce = this.planter.getPierce();
-        current_position = this.position.clone();
-        explosion_end = false;
-
-        for(int i=1; i<=this.planter.getRange(); i++){
-            current_position[1] = explosion_start_position[1] + i * 32;
-            for(Obstacle obstacle : Map.Obstacles){
-                if(Arrays.equals(obstacle.position, current_position))
-                {
-                    System.out.println("akadály van");
-                    if(obstacle.isDestroyable() && current_pierce!=0) {
-                        //doboz
-                        current_pierce--;
-                        break;
-                    }else{
-                        //fal
-                        explosion_end = true;
-                        break;
-                    }
-                }
-            }
-            if(explosion_end) {
-                break;
-            }else{
-                if(i==this.planter.getRange()){
-                    type = ExplosionType.BOTTOM_END;
-                }else{
-                    type = ExplosionType.VERTICAL;
-                }
-                Map.Explosions.add(new Explosion(Map.Sprites.get("Explosion_sprites"), current_position, type));
             }
         }
     }

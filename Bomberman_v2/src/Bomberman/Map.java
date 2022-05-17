@@ -102,38 +102,30 @@ public class Map{
                         }
 
                         Powerup Powerup = new Powerup(tipus, position);
-                        Powerups.add(Powerup);
                         obstacle.ContainsPowerup = true;
                         obstacle.Powerup = Powerup;
                     }
-                   // Obstacles.add(obstacle);
+                   Obstacles.add(obstacle);
                 }
             }
         }
-
-        //TODO: random tesztdoboz az első oszlop alatt, kiszedni!
-        Obstacle obstacle = new Obstacle(Sprites.get("BreakableObstacle"), new int[]{2*32, 3*32}, true);
-        Obstacles.add(obstacle);
-
-        /*for(int i=0;i< Obstacles.size();i++) {
-            System.out.println("x " + Obstacles.get(i).position[0] + "y " + Obstacles.get(i).position[1]);
-        }*/
     }
 
     //játékmechanika megvalósítása
     public void Update () {
         for (Player player: Players) {
             player.Update();
-            //TODO: collision detection a player körül (más nem interaktál)
-            //TODO: robbanás kezelése: akadályok lebontása, ami alatt van powerup, az jelenjen meg
         }
-
         for (int i=0; i<Bombs.size(); i++) {
             Bombs.get(i).Update();
         }
-
         for (int i=0; i<Explosions.size(); i++) {
             Explosions.get(i).Update();
+        }
+        for (int i=0; i<Obstacles.size(); i++) {
+            if(Obstacles.get(i).ExplosionOnTile) {
+                Obstacles.get(i).Destroy();
+            }
         }
 
         //rajzolás buffereléssel: a villogás elkerülése végett egy MapContent bufferbe rajzolunk,
@@ -148,13 +140,8 @@ public class Map{
 
         //játékelemek kirajzolása
         for (Obstacle obstacle: Obstacles) {
-            if(obstacle.ContainsPowerup){
-                buffer.drawImage(obstacle.Powerup.currentSprite, obstacle.position[0], obstacle.position[1], null);
-            }else {
-                buffer.drawImage(obstacle.currentSprite, obstacle.position[0], obstacle.position[1], null);
-            }
+            buffer.drawImage(obstacle.currentSprite, obstacle.position[0], obstacle.position[1], null);
         }
-
         for (Bomb bomb: Bombs) {
             buffer.drawImage(bomb.currentSprite, bomb.position[0], bomb.position[1], null);
         }

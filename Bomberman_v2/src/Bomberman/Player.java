@@ -3,10 +3,10 @@ package Bomberman;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.image.BufferedImage;
+import java.util.ArrayList;
 import java.util.Arrays;
 
 import static Bomberman.Map.*;
-import static Bomberman.PowerupType.*;
 
 public class Player extends Element implements KeyListener {
 
@@ -18,6 +18,7 @@ public class Player extends Element implements KeyListener {
     private int Speed = 1;
 
     private int placed_bombs = 0;
+    private ArrayList<Explosion> damagedByExplosionOrigin = new ArrayList<>();
 
     //lenyomott billenytűk flag-jei
     private boolean UpPressed = false;
@@ -182,6 +183,10 @@ public class Player extends Element implements KeyListener {
         }
     }
 
+    public void decreaseHealth(){
+        this.Health--;
+    }
+
     public void increasePierce(){
         this.Pierce++;
     }
@@ -200,9 +205,7 @@ public class Player extends Element implements KeyListener {
         return Range;
     }
 
-    public int getHealth() {
-        return Health;
-    }
+    public int getHealth() { return Health; }
 
     private boolean Collision(){
         //falakra
@@ -216,42 +219,29 @@ public class Player extends Element implements KeyListener {
         for(int i=0; i<Obstacles.size(); i++)
         {
             //BAL
-            if(Obstacles.get(i).position[0]<this.position[0] && LeftPressed && (this.position[0]-Obstacles.get(i).position[0])<33 &&
+            if(Obstacles.get(i).position[0]<this.position[0] && LeftPressed && (this.position[0]-Obstacles.get(i).position[0])<32 &&
                     (Obstacles.get(i).position[1] > y_min) && (Obstacles.get(i).position[1] < y_max)) {
                 //System.out.println("LEFT");
                 return true;
             }
             //JOBB
-            if(Obstacles.get(i).position[0]>this.position[0] && RightPressed && (Obstacles.get(i).position[0]-this.position[0])<29 &&
+            if(Obstacles.get(i).position[0]>this.position[0] && RightPressed && (Obstacles.get(i).position[0]-this.position[0])<28 &&
                     (Obstacles.get(i).position[1] > y_min) && (Obstacles.get(i).position[1] < y_max)) {
                 //System.out.println("RIGHT");
                 return true;
             }
             //FEL
-            if(Obstacles.get(i).position[1]<this.position[1] && UpPressed && (this.position[1]-Obstacles.get(i).position[1])<17 &&
+            if(Obstacles.get(i).position[1]<this.position[1] && UpPressed && (this.position[1]-Obstacles.get(i).position[1])<16 &&
                     (Obstacles.get(i).position[0] > x_min) && (Obstacles.get(i).position[0] < x_max)) {
                 //System.out.println("UP");
                 return true;
             }
             //LE
-            if(Obstacles.get(i).position[1]>this.position[1] && DownPressed && (Obstacles.get(i).position[1]-this.position[1])<38 &&
+            if(Obstacles.get(i).position[1]>this.position[1] && DownPressed && (Obstacles.get(i).position[1]-this.position[1])<37 &&
                     (Obstacles.get(i).position[0] > x_min) && (Obstacles.get(i).position[0] < x_max)) {
                 //System.out.println("DOWN");
                 return true;
             }
-
-            //TODO: a többi irányba is ezzel analóg módon
-            /*
-            if(Obstacles.get(i).position[0]>this.position[0] && RightPressed && (Obstacles.get(i).position[0]-this.position[0])<5) {
-                System.out.println("RIGHT");
-                return true; }
-            if(Obstacles.get(i).position[1]<this.position[1] && DownPressed && (this.position[1]-Obstacles.get(i).position[1])<5) {
-                System.out.println("DOWN");
-                return true; }
-            if(Obstacles.get(i).position[1]>this.position[1] && UpPressed && (Obstacles.get(i).position[1]-this.position[1])<5) {
-                System.out.println("UP");
-                return true; }
-             */
         }
 
         //powerupra
@@ -287,21 +277,24 @@ public class Player extends Element implements KeyListener {
         }
 
         //bombára
+        //TODO ?
 
         //explosion-re
+        for(int i=0 ; i < Explosions.size(); i++){
+            if(x_min < Explosions.get(i).position[0] &&  Explosions.get(i).position[0] < x_max &&
+                    y_min < Explosions.get(i).position[1] && Explosions.get(i).position[1] < y_max)  {
+                if(!damagedByExplosionOrigin.contains(Explosions.get(i).getOrigin())) {
+                    damagedByExplosionOrigin.add(Explosions.get(i).getOrigin());
+                    decreaseHealth();
+                }
+            }
+        }
+        for(int i=0; i < damagedByExplosionOrigin.size(); i++){
+            if(!Explosions.contains(damagedByExplosionOrigin.get(i))){
+                damagedByExplosionOrigin.remove(i);
+            }
+        }
 
-        //TODO megnézni az összes dolgot, amivel ütközhet
-        //kitalálni, hogy a bombával hogyan működjön lerakás után
-
-        //bomba lerakás (Player hívja Action gomb hatására)
-       /* private void PlaceBomb(){
-                System.out.println("BUMM");
-            }*/
-            //Bomb bomb = new Bomb(...);
-            //Map.Bombs.add(bomb);
-            //TODO: Bombs.add() annak vizsgálatával, hogy van-e már az adott helyen bomba
-            // + hogy szeretnénk megcsinálni a sprite-ok animációit?
-            //Bomb.Align();
         return false;
     }
 }

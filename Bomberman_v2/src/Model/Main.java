@@ -7,7 +7,7 @@ public class Main {
         Network.Client Client;
         Network.Server Server;
 
-        public static long GeneralTimer = System.currentTimeMillis();
+        private static long GeneralTimer = System.currentTimeMillis();
         private static final int GameTick = 20;
 
         public static void main(String[] args) throws InterruptedException {
@@ -18,7 +18,7 @@ public class Main {
                 GameWindow.gameStarted.await();
                 double lastTime = 0;
 
-                while(true)
+                while(Game.getLoser() == null)
                 {
                         GeneralTimer = System.currentTimeMillis();
                         if((GeneralTimer-lastTime) / GameTick >= 1){
@@ -27,5 +27,6 @@ public class Main {
                                 lastTime = GeneralTimer;
                         }
                 }
+                System.out.println("Game over xxd");
         }
 }

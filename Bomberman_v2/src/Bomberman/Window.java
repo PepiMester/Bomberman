@@ -60,7 +60,7 @@ public class Window extends JFrame implements ActionListener {
         setIconImage(new ImageIcon("./src/Sprites/player1_.png").getImage());
 
         setDefaultCloseOperation(EXIT_ON_CLOSE);     //így lehet bezárni az ablakot X-szel
-        getContentPane().setPreferredSize(new Dimension(map.width * 32 + getInsets().left + getInsets().right, map.height * 32 + getInsets().top + getInsets().bottom));
+        getContentPane().setPreferredSize(new Dimension(map.getWidth() * 32 + getInsets().left + getInsets().right, map.getHeight() * 32 + getInsets().top + getInsets().bottom));
         setResizable(false);
         pack();
         setLocationRelativeTo(null);    //ablak középre igazítása a képernyőn

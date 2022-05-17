@@ -9,8 +9,8 @@ public class Bomb extends Tile {
     private int BombTimer;
     private boolean detonated = false;
 
-    private final int game_ticks_till_explosion = 100;
-    private final int animation_speed = 5;
+    private final int game_ticks_till_explosion = 150;
+    private final int animation_speed = 6;
 
     private final int spriteHeight = 32;
     private final int spriteWidth = 32;

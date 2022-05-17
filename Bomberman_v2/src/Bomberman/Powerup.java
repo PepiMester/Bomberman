@@ -2,11 +2,14 @@ package Bomberman;
 
 public class Powerup extends Tile{
 
-    public PowerupType PowerupType;
+    private PowerupType PowerupType;
+    private int PowerupTimer = 0;
 
     public Powerup(PowerupType poweruptype, int[] position) {
         super(null, position);
         this.PowerupType = poweruptype;
+        this.Destroyable = false;
+        this.ExplosionOnTile = false;
 
         switch (poweruptype){
             case POWER_FIREPOWER:
@@ -29,7 +32,12 @@ public class Powerup extends Tile{
 
     @Override
     public void Update() {
-
+        if(!this.Destroyable){
+            PowerupTimer++;
+            if(PowerupTimer>50){
+                this.Destroyable = true;
+            }
+        }
     }
 
     public void PickupPowerup(Player player) {
@@ -42,6 +50,7 @@ public class Powerup extends Tile{
                 break;
             case POWER_HEALTH:
                 player.increaseHealth();
+                System.out.println("New health: " + player.getHealth());
                 break;
             case POWER_PIERCE:
                 player.increasePierce();

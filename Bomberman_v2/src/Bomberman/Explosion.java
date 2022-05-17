@@ -10,6 +10,7 @@ public class Explosion extends Element{
     private int ExplosionTimer;
     private BufferedImage[][] Sprites;
     private ExplosionType explosiontype;
+    private Explosion origin;
 
     private final int spriteHeight = 32;
     private final int spriteWidth = 32;
@@ -25,7 +26,8 @@ public class Explosion extends Element{
         ExplosionType type;
 
         //robbanás közepe ott, ahol a bomba volt
-        Explosions.add(new Explosion(Map.Sprites.get("Explosion_sprites"), current_position, ExplosionType.CENTER));
+        Explosion origin = new Explosion(Map.Sprites.get("Explosion_sprites"), current_position, ExplosionType.CENTER);
+        Explosions.add(origin);
 
         //irányonként iterálunk végig az útba eső akadályokon a robbanás generálása során
         ExplosionType[] explosion_head = {ExplosionType.LEFT_END, ExplosionType.RIGHT_END, ExplosionType.TOP_END, ExplosionType.BOTTOM_END};
@@ -39,6 +41,12 @@ public class Explosion extends Element{
 
             for(int i=1; i<=bomb.getPlanter().getRange(); i++){
                 current_position[dir / 2] = explosion_start_position[dir / 2] + i * 32 * (dir % 2 > 0 ? 1 : -1);
+                for(Powerup powerup : Map.Powerups){
+                    if(Arrays.equals(powerup.position, current_position) && powerup.Destroyable)
+                    {
+                        powerup.ExplosionOnTile = true;
+                    }
+                }
                 for(Obstacle obstacle : Map.Obstacles){
                     if(Arrays.equals(obstacle.position, current_position))
                     {
@@ -63,7 +71,9 @@ public class Explosion extends Element{
                     }else{
                         type = explosion_column[dir];
                     }
-                    Explosions.add(new Explosion(Map.Sprites.get("Explosion_sprites"), current_position, type));
+                    Explosion explosion = new Explosion(Map.Sprites.get("Explosion_sprites"), current_position, type);
+                    explosion.setOrigin(origin);
+                    Explosions.add(explosion);
                 }
             }
         }
@@ -71,6 +81,7 @@ public class Explosion extends Element{
 
     public Explosion(BufferedImage sprite_map, int[] position, ExplosionType type) {
         super(sprite_map, position);
+        this.origin = this;
 
         int rows = sprite_map.getHeight() / spriteHeight;
         int cols = sprite_map.getWidth() / spriteWidth;
@@ -88,6 +99,16 @@ public class Explosion extends Element{
 
     public boolean isDecayed(){
         return decayed;
+    }
+
+    public Explosion getOrigin() {
+        return this.origin;
+    }
+
+    public void setOrigin(Explosion origin) {
+        if(origin != null && origin instanceof  Explosion){
+            this.origin = origin;
+        }
     }
 
     @Override

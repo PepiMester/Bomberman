@@ -20,8 +20,22 @@ public class Map{
 
     //konstansok, hogy itt egyszerre lehessen paraméterezni a mapot, ne kelljen mindenhol átírni
     // ha változtatni akarunk esetleg rajta
-    public final int width = 15;
-    public final int height = 15;
+    private final int width = 15;
+    private final int height = 15;
+
+    private Player loser = null;
+
+    public int getWidth() {
+        return width;
+    }
+
+    public int getHeight() {
+        return height;
+    }
+
+    public Player getLoser() {
+        return loser;
+    }
 
     public BufferedImage MapContent = new BufferedImage(width * 32, height * 32, BufferedImage.TYPE_INT_RGB);
 
@@ -119,6 +133,9 @@ public class Map{
     public void Update () {
         for (Player player: Players) {
             player.Update();
+            if(player.getHealth()==0){
+                this.loser = player;
+            }
         }
         for (int i=0; i<Bombs.size(); i++) {
             Bombs.get(i).Update();
@@ -136,6 +153,12 @@ public class Map{
         for (int i=0; i<Obstacles.size(); i++) {
             if(Obstacles.get(i).ExplosionOnTile) {
                 Obstacles.get(i).Destroy();
+            }
+        }
+        for (int i=0; i<Powerups.size(); i++) {
+            Powerups.get(i).Update();
+            if(Powerups.get(i).ExplosionOnTile && Powerups.get(i).Destroyable) {
+                Powerups.remove(i);
             }
         }
 
@@ -158,13 +181,44 @@ public class Map{
         }
         for (Powerup powerup: Powerups) {
             buffer.drawImage(powerup.currentSprite, powerup.position[0], powerup.position[1], null);
+            if(!powerup.Destroyable){
+                buffer.setColor(Color.cyan);
+                buffer.drawRect(powerup.position[0], powerup.position[1], 31, 31);
+                buffer.drawRect(powerup.position[0] + 1, powerup.position[1] + 1, 29, 29);
+            }
         }
         for (Player player: Players) {
+            DrawHealthBar(buffer, player);
             buffer.drawImage(player.currentSprite, player.position[0], player.position[1], null);
         }
         for (Explosion explosion: Explosions) {
             buffer.drawImage(explosion.currentSprite, explosion.position[0], explosion.position[1], null);
         }
+    }
+
+    private void DrawHealthBar(Graphics2D buffer, Player player){
+        buffer.setColor(Color.black);
+        buffer.fillRect(player.position[0] - 2, player.position[1] - 8, 31, 5);
+        switch (player.getHealth()) {
+            case 1:
+                buffer.setColor(Color.red);
+                break;
+            case 2:
+                buffer.setColor(Color.orange);
+                break;
+            case 3:
+                buffer.setColor(Color.yellow);
+                break;
+            case 4:
+                buffer.setColor(Color.green);
+                break;
+            default:
+                buffer.setColor(Color.black);
+                break;
+        }
+        buffer.fillRect(player.position[0] - 1, player.position[1] - 7, (31*player.getHealth())/4, 4);
+        buffer.setColor(Color.white);
+        buffer.drawRect(player.position[0] - 2, player.position[1] - 8, 31, 5);
     }
 }
 

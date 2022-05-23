@@ -9,19 +9,32 @@ import java.util.concurrent.CountDownLatch;
 public class Window extends JFrame implements ActionListener {
     private JPanel mainmenu;
     private Map map;
+    private boolean isClient;
+    private String hostAddress;
 
-    public CountDownLatch gameStarted = new CountDownLatch(1);
+    public CountDownLatch gameModeSelected = new CountDownLatch(1);
 
-    public Window(String title, Map map){
+    public boolean gameModeIsClient(){
+        return isClient;
+    }
+
+    public String getHostAddress(){
+        return hostAddress;
+    }
+
+    public Window(String title){
         super(title);
-        this.map = map;
         Initialize();
 
         //uncomment this to bypass main menu:
-        getContentPane().remove(mainmenu);
-        addKeyListener(Map.Players.get(0));
-        requestFocusInWindow();
-        gameStarted.countDown();
+        //getContentPane().remove(mainmenu);
+        //addKeyListener(Map.Players.get(0));
+        //requestFocusInWindow();
+        //gameStarted.countDown();
+    }
+
+    public void setMap(Map map){
+        this.map = map;
     }
 
     private void Initialize(){
@@ -69,30 +82,36 @@ public class Window extends JFrame implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent actionEvent) {  //itt kapódik el a gombok megnyomása
-
-        System.out.println(actionEvent.paramString());
-
         if(actionEvent.getActionCommand().equals("startCommand"))
         {
             getContentPane().remove(mainmenu);
             addKeyListener(Map.Players.get(0));
             requestFocusInWindow();
-            gameStarted.countDown();
+            this.isClient = false;
+            gameModeSelected.countDown();
         }
         else if(actionEvent.getActionCommand().equals("joinCommand"))
         {
             getContentPane().remove(mainmenu);
-            String target = JOptionPane.showInputDialog(this, "HOVA");
-            System.out.println("Csatlakozás ide: " + target);
+            this.hostAddress = JOptionPane.showInputDialog(this, "HOVA");
+            addKeyListener(Map.Players.get(1));
             requestFocusInWindow();
-            gameStarted.countDown();
+            this.isClient = true;
+            gameModeSelected.countDown();
         }
     }
 
     @Override
     public void paint(Graphics g){
-        if(gameStarted.getCount()==0) {
-            g.drawImage(map.MapContent, getInsets().left, getInsets().top, null);
+        if(gameModeSelected.getCount()==0) {
+            if(this.map!=null) {
+                g.drawImage(map.MapContent, getInsets().left, getInsets().top, null);
+            }else{
+                g.setColor(Color.lightGray);
+                g.setFont(g.getFont().deriveFont(20f));
+                String msg = "Várakozás a másik játékosra...";
+                g.drawString(msg, getWidth() / 2 - (int) g.getFontMetrics().getStringBounds(msg, g).getCenterX(), getHeight()/2);
+            }
         }
     }
 }

@@ -5,7 +5,7 @@ import java.util.Arrays;
 
 import static Bomberman.Map.Explosions;
 
-public class Explosion extends Element{
+public class Explosion extends Element {
 
     private int ExplosionTimer;
     private BufferedImage[][] Sprites;

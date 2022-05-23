@@ -1,8 +1,9 @@
 package Bomberman;
 
 import java.awt.image.BufferedImage;
+import java.io.Serializable;
 
-public abstract class Element {
+public abstract class Element implements Serializable {
 
     protected BufferedImage currentSprite;
     protected int[] position;

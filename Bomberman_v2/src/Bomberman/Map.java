@@ -1,35 +1,34 @@
 package Bomberman;
 
 import java.awt.image.BufferedImage;
-import java.io.IOException;
+import java.io.*;
 import java.util.ArrayList;
 import java.awt.*;
 import javax.imageio.ImageIO;
-import java.io.File;
 import java.util.HashMap;
 import java.util.Random;
 
-public class Map{
+public class Map implements Serializable {
 
     public static ArrayList<Explosion> Explosions = new ArrayList<Explosion>();
     public static ArrayList<Player> Players = new ArrayList<Player>();
     public static ArrayList<Bomb> Bombs = new ArrayList<Bomb>();
     public static ArrayList<Powerup> Powerups = new ArrayList<Powerup>();
     public static ArrayList<Obstacle> Obstacles = new ArrayList<Obstacle>();
-    public static HashMap<String, BufferedImage> Sprites = new HashMap<String, BufferedImage>();
+    public transient static HashMap<String, BufferedImage> Sprites = new HashMap<String, BufferedImage>();
 
     //konstansok, hogy itt egyszerre lehessen paraméterezni a mapot, ne kelljen mindenhol átírni
     // ha változtatni akarunk esetleg rajta
-    private final int width = 15;
-    private final int height = 15;
+    private static final int width = 15;
+    private static final int height = 15;
 
     private Player loser = null;
 
-    public int getWidth() {
+    public static int getWidth() {
         return width;
     }
 
-    public int getHeight() {
+    public static int getHeight() {
         return height;
     }
 
@@ -37,7 +36,21 @@ public class Map{
         return loser;
     }
 
-    public BufferedImage MapContent = new BufferedImage(width * 32, height * 32, BufferedImage.TYPE_INT_RGB);
+    public transient BufferedImage MapContent = new BufferedImage(width * 32, height * 32, BufferedImage.TYPE_INT_RGB);
+
+    private void writeObject(ObjectOutputStream out) throws IOException {
+        out.defaultWriteObject();
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        ImageIO.write(MapContent, "png", baos);
+        out.writeObject(baos.toByteArray());
+        System.out.println("kép kint");
+    }
+
+    private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException {
+        in.defaultReadObject();
+        MapContent = ImageIO.read(new ByteArrayInputStream((byte[])in.readObject()));
+        System.out.println("kép bent");
+    }
 
     public Map()
     {
@@ -54,19 +67,6 @@ public class Map{
     private void readSprites()
     {
         try {
-            /*
-            Sprites.put("UnbreakableObstacle", ImageIO.read(new File("./Sprites/wall.png")));
-            Sprites.put("BreakableObstacle", ImageIO.read(new File("./Sprites/obstacle.png")));
-            Sprites.put("Player1_sprites", ImageIO.read(new File("./Sprites/player1.png")));
-            Sprites.put("Player2_sprites", ImageIO.read(new File("./Sprites/player2.png")));
-            Sprites.put("Bomb_sprites", ImageIO.read(new File("./Sprites/bomb.png")));
-            Sprites.put("Explosion_sprites", ImageIO.read(new File("./Sprites/explosion.png")));
-            Sprites.put("Powerup_HealthBoost", ImageIO.read(new File("./Sprites/healthboost.png")));
-            Sprites.put("Powerup_ExtraAmmo", ImageIO.read(new File("./Sprites/extra_bomb.png")));
-            Sprites.put("Powerup_Pierce", ImageIO.read(new File("./Sprites/pierce.png")));
-            Sprites.put("Powerup_Speed", ImageIO.read(new File("./Sprites/speed.png")));
-            Sprites.put("Powerup_Range", ImageIO.read(new File("./Sprites/range.png")))
-             */
             Sprites.put("UnbreakableObstacle", ImageIO.read(getClass().getClassLoader().getResource("wall.png")));
             Sprites.put("BreakableObstacle", ImageIO.read(getClass().getClassLoader().getResource("obstacle.png")));
             Sprites.put("Player1_sprites", ImageIO.read(getClass().getClassLoader().getResource("player1.png")));

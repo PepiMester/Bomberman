@@ -106,6 +106,34 @@ public class Player extends Element implements KeyListener {
         //erre nincs szükség, csak a KeyListener interface implementálásához kell, hogy létezzen ez a metódus
     }
 
+    public char getAction(){
+        char action = 0;
+        if(this.UpPressed){
+            action |= (0x01);
+        }
+        if(this.DownPressed){
+            action |= (0x02);
+        }
+        if(this.LeftPressed){
+            action |= (0x04);
+        }
+        if(this.RightPressed){
+            action |= (0x08);
+        }
+        if(this.ActionPressed){
+            action |= (0x10);
+        }
+        return action;
+    }
+
+    public void setAction(char action){
+        this.UpPressed = ((action & (0x01)) != 0);
+        this.DownPressed = ((action & (0x02)) != 0);
+        this.LeftPressed = ((action & (0x04)) != 0);
+        this.RightPressed = ((action & (0x08)) != 0);
+        this.ActionPressed = ((action & (0x10)) != 0);
+    }
+
     //játékos cselekvései
     public void Update() {
         boolean isCollision = Collision();
@@ -276,9 +304,6 @@ public class Player extends Element implements KeyListener {
             }
         }
 
-        //bombára
-        //TODO ?
-
         //explosion-re
         for(int i=0 ; i < Explosions.size(); i++){
             if(x_min < Explosions.get(i).position[0] &&  Explosions.get(i).position[0] < x_max &&
@@ -290,7 +315,14 @@ public class Player extends Element implements KeyListener {
             }
         }
         for(int i=0; i < damagedByExplosionOrigin.size(); i++){
-            if(!Explosions.contains(damagedByExplosionOrigin.get(i))){
+            boolean explosion_decayed = true;
+            for(int j=0; j<Explosions.size(); j++){
+                if(Explosions.get(j).getOrigin().equals(damagedByExplosionOrigin.get(i))){
+                    explosion_decayed = false;
+                    break;
+                }
+            }
+            if(explosion_decayed){
                 damagedByExplosionOrigin.remove(i);
             }
         }

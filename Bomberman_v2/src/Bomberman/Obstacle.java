@@ -4,7 +4,7 @@ import java.awt.image.BufferedImage;
 import static Bomberman.Map.Obstacles;
 import static Bomberman.Map.Powerups;
 
-public class Obstacle extends Tile{
+public class Obstacle extends Tile {
 
     private Powerup Powerup;
     private boolean ContainsPowerup;

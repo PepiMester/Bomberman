@@ -50,7 +50,6 @@ public class Powerup extends Tile{
                 break;
             case POWER_HEALTH:
                 player.increaseHealth();
-                System.out.println("New health: " + player.getHealth());
                 break;
             case POWER_PIERCE:
                 player.increasePierce();

@@ -48,7 +48,7 @@ public class Main {
                         GeneralTimer = System.currentTimeMillis();
                         if((GeneralTimer-lastTime) / GameTick >= 1){
                                 if(GameWindow.gameModeIsClient()) {
-                                        Client.SendAction(Map.Players.get(1).getAction());
+                                        Client.SendAction(Game);
                                         //Game = Client.ReceiveGameplay();
                                         //GameWindow.setMap(Game);
                                         //GameWindow.repaint();   //grafikát frissíti

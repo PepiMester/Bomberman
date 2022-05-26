@@ -9,18 +9,18 @@ import java.net.Socket;
 public class Client {
 
     private Socket socket;
-    private ObjectInputStream in;
+    private DataInputStream in;
     private DataOutputStream out;
 
     public Client(String IP) throws IOException {
         socket = new Socket(IP, 65535);
-        in = new ObjectInputStream(socket.getInputStream());
+        in = new DataInputStream(socket.getInputStream());
         out = new DataOutputStream(socket.getOutputStream());
     }
 
-    public void SendAction(char action){
+    public void SendAction(Map map){
         try {
-            out.write(action);
+            out.write(map.Players.get(1).getAction());
         } catch (IOException e) {
             e.printStackTrace();
         }

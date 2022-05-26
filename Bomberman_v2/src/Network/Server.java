@@ -10,16 +10,16 @@ public class Server implements Runnable{
 
     private Socket socket;
     private ServerSocket s_socket;
-    private InputStreamReader in;
-    private ObjectOutputStream out;
+    private DataInputStream in;
+    private DataOutputStream out;
     private volatile char action;
 
     public Server(){
         try {
             s_socket = new ServerSocket(65535);
             socket = s_socket.accept();
-            in = new InputStreamReader(socket.getInputStream());
-            out = new ObjectOutputStream(socket.getOutputStream());
+            in = new DataInputStream(socket.getInputStream());
+            out = new DataOutputStream(socket.getOutputStream());
         } catch (IOException e) {
             e.printStackTrace();
         }

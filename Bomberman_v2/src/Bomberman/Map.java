@@ -36,7 +36,7 @@ public class Map implements Serializable {
         return loser;
     }
 
-    public transient BufferedImage MapContent = new BufferedImage(width * 32, height * 32, BufferedImage.TYPE_INT_RGB);
+    public BufferedImage MapContent = new BufferedImage(width * 32, height * 32, BufferedImage.TYPE_INT_RGB);
 
     private void writeObject(ObjectOutputStream out) throws IOException {
         out.defaultWriteObject();
@@ -144,33 +144,33 @@ public class Map implements Serializable {
 
     //játékmechanika megvalósítása
     public void Update () {
-        for (Player player: Players) {
+        for (Player player : Players) {
             player.Update();
-            if(player.getHealth()==0){
+            if (player.getHealth() == 0) {
                 this.loser = player;
             }
         }
-        for (int i=0; i<Bombs.size(); i++) {
+        for (int i = 0; i < Bombs.size(); i++) {
             Bombs.get(i).Update();
-            if(Bombs.get(i).isDetonated()){
+            if (Bombs.get(i).isDetonated()) {
                 Explosion.Spawn(Bombs.get(i));
                 Bombs.remove(i);
             }
         }
-        for (int i=0; i<Explosions.size(); i++) {
+        for (int i = 0; i < Explosions.size(); i++) {
             Explosions.get(i).Update();
-            if(Explosions.get(i).isDecayed()){
+            if (Explosions.get(i).isDecayed()) {
                 Explosions.remove(i);
             }
         }
-        for (int i=0; i<Obstacles.size(); i++) {
-            if(Obstacles.get(i).ExplosionOnTile) {
+        for (int i = 0; i < Obstacles.size(); i++) {
+            if (Obstacles.get(i).ExplosionOnTile) {
                 Obstacles.get(i).Destroy();
             }
         }
-        for (int i=0; i<Powerups.size(); i++) {
+        for (int i = 0; i < Powerups.size(); i++) {
             Powerups.get(i).Update();
-            if(Powerups.get(i).ExplosionOnTile && Powerups.get(i).Destroyable) {
+            if (Powerups.get(i).ExplosionOnTile && Powerups.get(i).Destroyable) {
                 Powerups.remove(i);
             }
         }

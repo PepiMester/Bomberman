@@ -2,6 +2,8 @@ package Network;
 
 import Bomberman.Map;
 
+import javax.imageio.ImageIO;
+import java.awt.image.DataBufferByte;
 import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -40,13 +42,18 @@ public class Server implements Runnable{
         map.Players.get(1).setAction(action);
     }
 
-    /*
     public void sendMap(Map map){
         try {
-            out.writeObject(map); //TODO: ez az egy SOR valami mágia folyatán csak egyszer fut le WTF
+            /*
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            ImageIO.write(map.MapContent, "jpg", baos);
+            byte[] bytes = baos.toByteArray();
+            out.write(bytes);*/
+            byte[] bytes = ((DataBufferByte) map.MapContent.getData().getDataBuffer()).getData();
+            out.write(bytes);
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
-    */
+
 }

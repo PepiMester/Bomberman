@@ -1,8 +1,11 @@
 package com.brszt.swingdemo;
 
+import java.io.IOException;
+
 public class Main {
 
     public static void main(String[] args) throws InterruptedException {
+
         Map map = new Map();
         GameWindow gw = new GameWindow("Demo játék", map);
 

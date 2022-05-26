@@ -6,24 +6,41 @@ import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
 
-public class Server {
+public class Server implements Runnable{
 
     private Socket socket;
     private ServerSocket s_socket;
+    private InputStreamReader in;
     private ObjectOutputStream out;
-    private ObjectInputStream in;
+    private volatile char action;
 
     public Server(){
         try {
             s_socket = new ServerSocket(65535);
             socket = s_socket.accept();
+            in = new InputStreamReader(socket.getInputStream());
             out = new ObjectOutputStream(socket.getOutputStream());
-            in = new ObjectInputStream(socket.getInputStream());
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
+    @Override
+    public void run(){
+        while(true){
+            try {
+                action = (char) in.read();    //várakozik adatra
+            }catch (IOException ex){
+                ex.printStackTrace();
+            }
+        }
+    }
+
+    public void assertAction(Map map){
+        map.Players.get(1).setAction(action);
+    }
+
+    /*
     public void sendMap(Map map){
         try {
             out.writeObject(map); //TODO: ez az egy SOR valami mágia folyatán csak egyszer fut le WTF
@@ -31,14 +48,5 @@ public class Server {
             e.printStackTrace();
         }
     }
-
-    public void assertAction(Map map){
-        try {
-            char action = in.readChar();    //várakozik adatra
-            map.Players.get(1).setAction(action);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
+    */
 }

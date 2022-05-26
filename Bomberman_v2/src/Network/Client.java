@@ -10,17 +10,17 @@ public class Client {
 
     private Socket socket;
     private ObjectInputStream in;
-    private ObjectOutputStream out;
+    private DataOutputStream out;
 
     public Client(String IP) throws IOException {
         socket = new Socket(IP, 65535);
         in = new ObjectInputStream(socket.getInputStream());
-        out = new ObjectOutputStream(socket.getOutputStream());
+        out = new DataOutputStream(socket.getOutputStream());
     }
 
-    public void SendAction(Player player){
+    public void SendAction(char action){
         try {
-            out.writeChar(player.getAction());
+            out.write(action);
         } catch (IOException e) {
             e.printStackTrace();
         }

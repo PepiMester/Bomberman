@@ -2,9 +2,10 @@ package com.brszt.swingdemo;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class Map {
+public class Map implements Serializable {
 
     public BufferedImage content;
     public static ArrayList<Objektum> Objects = new ArrayList<Objektum>();

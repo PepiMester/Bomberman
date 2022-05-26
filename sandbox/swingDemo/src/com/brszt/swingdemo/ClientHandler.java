@@ -1,6 +1,12 @@
 package com.brszt.swingdemo;
 
-public class ClentHandler extends Runnable {
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
+import java.net.Socket;
+
+public class ClientHandler extends Thread {
     //ez csinálja meg minden egyes kliens számára a kommunikációt, ill. annak funkcionális részét
 
     private Socket sock;

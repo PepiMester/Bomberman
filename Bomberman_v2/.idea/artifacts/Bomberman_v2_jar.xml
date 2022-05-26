@@ -1,0 +1,9 @@
+<component name="ArtifactManager">
+  <artifact type="jar" build-on-make="true" name="Bomberman_v2:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/Bomberman_v2_jar</output-path>
+    <root id="archive" name="Bomberman_v2.jar">
+      <element id="module-output" name="Bomberman_v2" />
+      <element id="dir-copy" path="$PROJECT_DIR$/Sprites" />
+    </root>
+  </artifact>
+</component>

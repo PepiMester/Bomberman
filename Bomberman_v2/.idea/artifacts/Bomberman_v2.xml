@@ -1,6 +1,0 @@
-<component name="ArtifactManager">
-  <artifact type="jar" name="Bomberman_v2">
-    <output-path>$PROJECT_DIR$/out/artifacts/Bomberman_v2</output-path>
-    <root id="archive" name="Bomberman_v2.jar" />
-  </artifact>
-</component>

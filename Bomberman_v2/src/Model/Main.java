@@ -9,6 +9,7 @@ import java.io.IOException;
 public class Main {
         private static Client Client;
         private static Server Server;
+        private static Thread serverThread;
 
         //TODO külön szálon a kommunikációt
 
@@ -22,7 +23,7 @@ public class Main {
 
                 //játékmód kiválasztása...
                 GameWindow.gameModeSelected.await();
-                Thread.sleep(1);
+                Thread.sleep(100);
                 GameWindow.repaint();
 
                 if(GameWindow.gameModeIsClient()){
@@ -33,7 +34,10 @@ public class Main {
                         }
                 }else{
                         Server = new Server(); //várakozik a csatlakozásig
-                        Server.sendMap(Game);
+                        serverThread = new Thread(Server);
+                        serverThread.start();
+                        Thread.sleep(200);
+                        //Server.sendMap(Game);
                         GameWindow.setMap(Game);
                 }
 
@@ -44,18 +48,19 @@ public class Main {
                         GeneralTimer = System.currentTimeMillis();
                         if((GeneralTimer-lastTime) / GameTick >= 1){
                                 if(GameWindow.gameModeIsClient()) {
-                                        Client.SendAction(Map.Players.get(1));
+                                        Client.SendAction(Map.Players.get(1).getAction());
                                         //Game = Client.ReceiveGameplay();
                                         //GameWindow.setMap(Game);
                                         //GameWindow.repaint();   //grafikát frissíti
-                                        lastTime = GeneralTimer;
                                 }else{
+                                        //Game.Players.get(1).setAction(Server.getRemoteAction());
                                         Server.assertAction(Game);
                                         Game.Update();          //játékmechanikát frissíti
                                         //Server.sendMap(Game);   //elküldi a játék állását a kliensnek
                                         GameWindow.repaint();   //grafikát frissíti
-                                        lastTime = GeneralTimer;
                                 }
+                                lastTime = GeneralTimer;
+                                Thread.sleep(5);
                         }
                 }
                 System.out.println("Game over xxd");

@@ -3,7 +3,6 @@ package Network;
 import Bomberman.Map;
 
 import javax.imageio.ImageIO;
-import java.awt.image.DataBufferByte;
 import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -13,7 +12,7 @@ public class Server implements Runnable{
     private Socket socket;
     private ServerSocket s_socket;
     private DataInputStream in;
-    private DataOutputStream out;
+    private BufferedOutputStream out;
     private volatile char action;
 
     public Server(){
@@ -21,7 +20,7 @@ public class Server implements Runnable{
             s_socket = new ServerSocket(65535);
             socket = s_socket.accept();
             in = new DataInputStream(socket.getInputStream());
-            out = new DataOutputStream(socket.getOutputStream());
+            out = new BufferedOutputStream(socket.getOutputStream());
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -44,16 +43,11 @@ public class Server implements Runnable{
 
     public void sendMap(Map map){
         try {
-            /*
-            ByteArrayOutputStream baos = new ByteArrayOutputStream();
-            ImageIO.write(map.MapContent, "jpg", baos);
-            byte[] bytes = baos.toByteArray();
-            out.write(bytes);*/
-            byte[] bytes = ((DataBufferByte) map.MapContent.getData().getDataBuffer()).getData();
-            out.write(bytes);
+            ImageIO.write(map.MapContent, "bmp", out);
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
+
 
 }

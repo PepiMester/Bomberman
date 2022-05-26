@@ -11,14 +11,15 @@ import java.net.Socket;
 public class Client implements Runnable {
 
     private Socket socket;
-    private DataInputStream in;
+    private BufferedInputStream in;
     private DataOutputStream out;
 
-    private BufferedImage image = new BufferedImage(Map.getWidth() * 32, Map.getHeight() * 32, BufferedImage.TYPE_INT_RGB);
+    private BufferedImage kep = new BufferedImage(Map.getWidth() * 32, Map.getHeight() * 32, BufferedImage.TYPE_INT_RGB);
+    public volatile int packetsize;
 
     public Client(String IP) throws IOException {
         socket = new Socket(IP, 65535);
-        in = new DataInputStream(socket.getInputStream());
+        in = new BufferedInputStream(socket.getInputStream());
         out = new DataOutputStream(socket.getOutputStream());
     }
 
@@ -28,22 +29,6 @@ public class Client implements Runnable {
         } catch (IOException e) {
             e.printStackTrace();
         }
-    }
-
-    @Override
-    public void run(){
-        try {
-            byte[] bytes = in.readAllBytes();
-            InputStream is = new ByteArrayInputStream(bytes);
-            image = ImageIO.read(is);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public BufferedImage getImage() {
-        System.out.println(new Color(image.getRGB(48, 48)).getBlue());
-        return image;
     }
 
     /*
@@ -56,8 +41,7 @@ public class Client implements Runnable {
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
-        return map;
-    }*/
+    }
 
     public void Close(){
         try {
@@ -66,6 +50,21 @@ public class Client implements Runnable {
             socket.close();
         }catch (IOException e){
 
+        }
+    }*/
+
+    public BufferedImage ReceiveGameplay(){
+        return kep;
+    }
+
+    @Override
+    public void run() {
+        for(;;) {
+            try {
+                kep = ImageIO.read(in);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
 }

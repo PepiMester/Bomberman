@@ -2,6 +2,7 @@ package Model;
 
 import Bomberman.Map;
 import Bomberman.Window;
+import Bomberman.mapthread;
 import Network.*;
 
 import java.io.IOException;
@@ -9,35 +10,49 @@ import java.io.IOException;
 public class Main {
         private static Client Client;
         private static Server Server;
-        private static Thread serverThread;
 
+        private static mapthread mapthread;
+        private static Thread thread;
+
+        private static Thread threead;
+        private static Thread threadmap;
+
+        private static boolean sendmap;
         //TODO külön szálon a kommunikációt
-
+        public static Map Game;
         private static long GeneralTimer = System.currentTimeMillis();
         private static final int GameTick = 20;
 
         public static void main(String[] args) throws InterruptedException {
 
                 Window GameWindow = new Window("Bomberman");
-                Map Game = new Map();   //pálya létrehozása, generálása
+                Game = new Map();   //pálya létrehozása, generálása
 
                 //játékmód kiválasztása...
                 GameWindow.gameModeSelected.await();
-                Thread.sleep(100);
+                Thread.sleep(1);
                 GameWindow.repaint();
 
                 if(GameWindow.gameModeIsClient()){
                         try {
                                 Client = new Client(GameWindow.getHostAddress());
+
+
                         }catch (IOException e){
 
                         }
+                        GameWindow.setMap(Game);
+                        threead = new Thread(Client);
+                        threead.start();
                 }else{
                         Server = new Server(); //várakozik a csatlakozásig
-                        serverThread = new Thread(Server);
-                        serverThread.start();
-                        Thread.sleep(200);
+                        thread = new Thread(Server);
+                        threadmap = new Thread(mapthread);
+
+                        thread.start();
                         //Server.sendMap(Game);
+                        threadmap.start();
+
                         GameWindow.setMap(Game);
                 }
 
@@ -47,20 +62,26 @@ public class Main {
                 {
                         GeneralTimer = System.currentTimeMillis();
                         if((GeneralTimer-lastTime) / GameTick >= 1){
-                                if(GameWindow.gameModeIsClient()) {
-                                        Client.SendAction(Game);
+                                if(GameWindow.gameModeIsClient()){
+
+                                        Client.SendAction(Map.Players.get(1));
+
+                                        Game.MapContent = Client.ReceiveGameplay();
+                                        GameWindow.repaint();
+                                        //Game.Rajzoljgec();
                                         //Game = Client.ReceiveGameplay();
                                         //GameWindow.setMap(Game);
                                         //GameWindow.repaint();   //grafikát frissíti
+                                        lastTime = GeneralTimer;
                                 }else{
-                                        //Game.Players.get(1).setAction(Server.getRemoteAction());
+
                                         Server.assertAction(Game);
-                                        Game.Update();          //játékmechanikát frissíti
-                                        //Server.sendMap(Game);   //elküldi a játék állását a kliensnek
+                                        Game.Update();
+                                       // Game.Rajzoljgec();//játékmechanikát frissíti
+                                           //elküldi a játék állását a kliensnek
                                         GameWindow.repaint();   //grafikát frissíti
+                                        lastTime = GeneralTimer;
                                 }
-                                lastTime = GeneralTimer;
-                                Thread.sleep(5);
                         }
                 }
                 System.out.println("Game over xxd");

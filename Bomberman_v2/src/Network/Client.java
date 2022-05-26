@@ -1,14 +1,19 @@
 package Network;
 
 import Bomberman.Map;
+import Bomberman.Player;
 
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
 import java.io.*;
 import java.net.Socket;
 
-public class Client {
+import static Model.Main.Game;
 
+public class Client implements Runnable{
+    private static volatile BufferedImage kep;
     private Socket socket;
-    private DataInputStream in;
+    private static DataInputStream in;
     private DataOutputStream out;
 
     public Client(String IP) throws IOException {
@@ -17,26 +22,18 @@ public class Client {
         out = new DataOutputStream(socket.getOutputStream());
     }
 
-    public void SendAction(Map map){
+    public void SendAction(Player player){
         try {
-            out.write(map.Players.get(1).getAction());
+            out.write(player.getAction());
+            System.out.println((int)player.getAction());
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    /*
-    public Map ReceiveGameplay(){
-        Map map = null;
-        try {
-            map = (Map) in.readObject();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        }
-        return map;
-    }*/
+    public static BufferedImage ReceiveGameplay(){
+       return kep;
+    }
 
     public void Close(){
         try {
@@ -45,6 +42,21 @@ public class Client {
             socket.close();
         }catch (IOException e){
 
+        }
+    }
+
+    @Override
+    public void run() {
+        for(;;) {
+System.out.println("OBLITERATE!!");
+            try {
+
+                kep = ImageIO.read(in);
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            throw new RuntimeException();
         }
     }
 }

@@ -1,7 +1,6 @@
 package Network;
 
 import Bomberman.Map;
-import Bomberman.Player;
 
 import java.io.*;
 import java.net.Socket;
@@ -26,6 +25,7 @@ public class Client {
         }
     }
 
+    /*
     public Map ReceiveGameplay(){
         Map map = null;
         try {
@@ -36,7 +36,7 @@ public class Client {
             e.printStackTrace();
         }
         return map;
-    }
+    }*/
 
     public void Close(){
         try {

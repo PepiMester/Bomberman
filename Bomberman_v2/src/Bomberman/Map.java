@@ -233,6 +233,26 @@ public class Map implements Serializable {
         buffer.setColor(Color.white);
         buffer.drawRect(player.position[0] - 2, player.position[1] - 8, 31, 5);
     }
+
+    public void drawGameOverScreen(boolean win){
+        Graphics g = MapContent.createGraphics();
+        String msg;
+        if(win) {
+            g.setColor(Color.GREEN);
+            g.fillRect(0, Map.getHeight() * 32 * 2/5, Map.getWidth() * 32, Map.getHeight() * 32 / 5);
+            g.setColor(Color.BLACK);
+            g.setFont(g.getFont().deriveFont(60f));
+            msg = "Győzelem!";
+        }else{
+            g.setColor(Color.red);
+            g.fillRect(0, Map.getHeight() * 32 * 2/5, Map.getWidth() * 32, Map.getHeight() * 32 / 5);
+            g.setColor(Color.BLACK);
+            g.setFont(g.getFont().deriveFont(60f));
+            msg = "Vesztettél!";
+        }
+        g.drawString(msg, 32 * getWidth() / 2 - (int) g.getFontMetrics().getStringBounds(msg, g).getCenterX(),
+                32 * getHeight() / 2 - (int) g.getFontMetrics().getStringBounds(msg, g).getCenterY());
+    }
 }
 
 

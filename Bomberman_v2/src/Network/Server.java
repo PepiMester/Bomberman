@@ -14,6 +14,7 @@ public class Server implements Runnable{
     private DataInputStream in;
     private BufferedOutputStream out;
     private volatile char action;
+    private volatile boolean running = true;
 
     public Server(){
         try {
@@ -28,7 +29,7 @@ public class Server implements Runnable{
 
     @Override
     public void run(){
-        while(true){
+        while(running){
             try {
                 action = (char) in.read();    //várakozik adatra
             }catch (IOException ex){
@@ -49,5 +50,17 @@ public class Server implements Runnable{
         }
     }
 
+    public void stop(){
+        running = false;
+    }
 
+    public void Close() {
+        try {
+            out.close();
+            in.close();
+            socket.close();
+        }catch (IOException e){
+            e.printStackTrace();
+        }
+    }
 }
